@@ -5,27 +5,26 @@ db = SQLAlchemy()
 
 
 class Cohort(db.Model):
-    """A group of students"""
+    """ cohort fields """
 
     __tablename__ = "cohorts"
 
-    def __repr__(self):
-
-        return "\n< %s Cohort, grad %s >" % (self.name, self.grad_date)
-
     cohort_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50))
-    grad_date = db.Column(db.DateTime) 
+    grad_date = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return "< %s Cohort, grad %s >" % (self.name, self.grad_date)
 
 
 class Student(db.Model):
-    """ student (user) information"""
+    """ student fields and relationship to cohorts table """
 
     __tablename__ = "students"
 
     def __repr__(self):
 
-        return "\n< %s is a student >" % (self.name)
+        return "< %s is a student >" % (self.name)
 
     student_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
@@ -39,6 +38,36 @@ class Student(db.Model):
 
 
 
+class Project(db.Model):
+    """ Project fields """
+
+    __tablename__="projects"
+
+    project_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String)
+
+
+
+class Pair(db.Model):
+    """Who paired with whom on which project and what did they learn together"""
+
+    __tablename__="pairs"
+
+    pairing_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    project_id = db.Column(db.Integer,
+                          db.ForeignKey('projects.project_id'),
+                          nullable=False)
+    pair_1_id = db.Column(db.Integer,
+                          db.ForeignKey('students.student_id'),
+                          nullable=False)
+    # pair_2_id = db.Column(db.Integer,
+    #                       db.ForeignKey('students.student_id'),
+    #                       nullable=False)
+    notes = db.Column(db.String)
+
+    project = db.relationship("Project", backref="pairs")
+    student = db.relationship("Student", backref="pairs")
 
 
 def connect_to_db(app, db_uri="postgresql:///katcohort"):
@@ -48,17 +77,12 @@ def connect_to_db(app, db_uri="postgresql:///katcohort"):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
-    with app.app_context():
-        db.create_all()
-
-    return app
 
 
-# connect_to_db(app, "postgresql:///kattestdb")
 
-# Student(name ="Beth Happy", github_link ="git.hub", cohort_id = 1, email = "gmail.gmail")
+# # Student(name ="Beth Happy", github_link ="git.hub", cohort_id = 1, email = "gmail.gmail")
 
-# Cohort(name = "Joan")
+# # Cohort(name = "Joan")
 
 
 
@@ -68,7 +92,5 @@ if __name__ == "__main__":
 
     from server import app
     connect_to_db(app, "postgresql:///kattestdb")
-    print "Connected to DB."
-
     db.create_all() # this is not "creating the db" it is creating the tables, cols etc
     
