@@ -44,7 +44,7 @@ class RelationshipUnitTests(unittest.TestCase):
 
         pa = Pair(project_id=a_project_id,\
             pair_1_id=beth_and_ellen[0].student_id,\
-            # pair_2_id=beth_and_ellen[1].student_id,\
+            pair_2_id=beth_and_ellen[1].student_id,\
             notes="We learned soooo much!")
 
 

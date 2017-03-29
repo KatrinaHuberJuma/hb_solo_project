@@ -61,9 +61,9 @@ class Pair(db.Model):
     pair_1_id = db.Column(db.Integer,
                           db.ForeignKey('students.student_id'),
                           nullable=False)
-    # pair_2_id = db.Column(db.Integer,
-    #                       db.ForeignKey('students.student_id'),
-    #                       nullable=False)
+    pair_2_id = db.Column(db.Integer,
+                          db.ForeignKey('students.student_id'),
+                          nullable=False)
     notes = db.Column(db.String)
 
     project = db.relationship("Project", backref="pairs")
