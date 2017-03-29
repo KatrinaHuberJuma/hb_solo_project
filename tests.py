@@ -20,6 +20,7 @@ class RelationshipUnitTests(unittest.TestCase):
         bo_from_db = Cohort.query.first()
         bo_id = bo_from_db.cohort_id
 
+
         beth = Student(name="Beth Happy",\
             github_link="git.hub",\
             cohort_id=bo_id,\
@@ -38,14 +39,18 @@ class RelationshipUnitTests(unittest.TestCase):
 
         db.session.commit()
 
+
         beth_and_ellen = Student.query.all()
         a_project_id = Project.query.first().project_id
 
 
         pa = Pair(project_id=a_project_id,\
-            pair_1_id=beth_and_ellen[0].student_id,\
-            pair_2_id=beth_and_ellen[1].student_id,\
+            student_1_id=beth_and_ellen[0].student_id,\
+            student_2_id=beth_and_ellen[1].student_id,\
             notes="We learned soooo much!")
+
+        db.session.add(pa)
+        db.session.commit()
 
 
     def test_cohort_row(self):
@@ -114,3 +119,8 @@ class RelationshipUnitTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# def print_my_tables():
+#     pass
+    

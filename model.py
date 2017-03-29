@@ -52,22 +52,25 @@ class Project(db.Model):
 class Pair(db.Model):
     """Who paired with whom on which project and what did they learn together"""
 
-    __tablename__="pairs"
+    __tablename__ = "pairs"
 
     pairing_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     project_id = db.Column(db.Integer,
                           db.ForeignKey('projects.project_id'),
                           nullable=False)
-    pair_1_id = db.Column(db.Integer,
+    student_1_id = db.Column(db.Integer,
                           db.ForeignKey('students.student_id'),
                           nullable=False)
-    pair_2_id = db.Column(db.Integer,
+    student_2_id = db.Column(db.Integer,
                           db.ForeignKey('students.student_id'),
                           nullable=False)
     notes = db.Column(db.String)
 
     project = db.relationship("Project", backref="pairs")
-    student = db.relationship("Student", backref="pairs")
+    student1 = db.relationship("Student", backref="pairs1", foreign_keys=[student_1_id])
+    student2 = db.relationship("Student", backref="pairs2", foreign_keys=[student_2_id])
+
+
 
 
 def connect_to_db(app, db_uri="postgresql:///katcohort"):
@@ -78,11 +81,6 @@ def connect_to_db(app, db_uri="postgresql:///katcohort"):
     db.app = app
     db.init_app(app)
 
-
-
-# # Student(name ="Beth Happy", github_link ="git.hub", cohort_id = 1, email = "gmail.gmail")
-
-# # Cohort(name = "Joan")
 
 
 
