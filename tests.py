@@ -1,5 +1,17 @@
 from model import connect_to_db, db, Cohort, Student, Project, Pair
 import unittest
+from server import app
+
+class ServerTests(unittest.TestCase):
+    """ tests routes """
+
+    def setUp(self):
+        self.client = app.test_client()
+        app.config['TESTING'] = True # fixme before deployment
+
+        def test_homepage(self):
+            result = self.client.get("/")
+            self.assertIn("Welcome!", result.data)
 
 
 

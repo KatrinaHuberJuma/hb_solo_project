@@ -33,6 +33,8 @@ class Student(db.Model):
                           db.ForeignKey('cohorts.cohort_id'),
                           nullable=False)
     email = db.Column(db.String(20), nullable=False)
+    demo_vid = db.Column(db.String(100))
+    profile_pic = db.Column(db.String(100))
 
     cohort = db.relationship("Cohort", backref="students")
 
