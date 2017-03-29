@@ -9,9 +9,15 @@ class ServerTests(unittest.TestCase):
         self.client = app.test_client()
         app.config['TESTING'] = True # fixme before deployment
 
-        def test_homepage(self):
-            result = self.client.get("/")
-            self.assertIn("Welcome!", result.data)
+    def test_homepage(self):
+        # TODO: check the signedout redirect to signin
+        result = self.client.get("/")
+        self.assertIn("Welcome!", result.data)
+
+    def test_signin(self): 
+        result = self.client.get("/signin")
+        self.assertIn("Please sign in!", result.data)
+
 
 
 
@@ -117,6 +123,17 @@ class RelationshipUnitTests(unittest.TestCase):
             .join(Project)
             .first()
             .project.title
+            )
+
+
+    def test_pair_relationship_to_student(self):
+        """ tests that there is a relationship between cohort and pair """
+
+        self.assertEqual('Beth Happy', db.session
+            .query(Pair)
+            .join(Project)
+            .first()
+            .student1.name
             )
 
 
