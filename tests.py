@@ -1,4 +1,6 @@
-from model import connect_to_db, db, Cohort, Student, Project, Pair
+
+# from connect_to_db import connect_to_db, db
+from model import connect_to_db, db, Cohort, Student, Lab, Pair
 import unittest
 from server import app
 
@@ -27,7 +29,6 @@ class RelationshipUnitTests(unittest.TestCase):
     def setUp(self):
         """Should connect to test db (kattestdb) and populate tables for testing"""
 
-        from server import app
         connect_to_db(app, "postgresql:///kattestdb")
         db.create_all()
 
@@ -43,15 +44,17 @@ class RelationshipUnitTests(unittest.TestCase):
             github_link="git.hub",\
             cohort_id=bo_id,\
             email="gmail.planetsave")
+
         db.session.add(beth)
 
         ellen = Student(name="Ellen Bellen",\
             github_link="hub.git",\
             cohort_id=bo_id,\
             email="gmail.gmail")
+
         db.session.add(ellen)
 
-        mel = Project(title="Balloonicorn Melon Festival",\
+        mel = Lab(title="Balloonicorn Melon Festival",\
             description="Balloonicorn's festival of melons")
         db.session.add(mel)
 
@@ -59,10 +62,10 @@ class RelationshipUnitTests(unittest.TestCase):
 
 
         beth_and_ellen = Student.query.all()
-        a_project_id = Project.query.first().project_id
+        a_lab_id = Lab.query.first().lab_id
 
 
-        pa = Pair(project_id=a_project_id,\
+        pa = Pair(lab_id=a_lab_id,\
             student_1_id=beth_and_ellen[0].student_id,\
             student_2_id=beth_and_ellen[1].student_id,\
             notes="We learned soooo much!")
@@ -105,24 +108,24 @@ class RelationshipUnitTests(unittest.TestCase):
             )
         
 
-    def test_project_row(self):
-        """ tests that a row was added to the projects table """
+    def test_lab_row(self):
+        """ tests that a row was added to the labss table """
 
-        self.assertEqual('Balloonicorn Melon Festival', Project.query
-            .filter(Project.title == 'Balloonicorn Melon Festival')
+        self.assertEqual('Balloonicorn Melon Festival', Lab.query
+            .filter(Lab.title == 'Balloonicorn Melon Festival')
             .one()
             .title
             )
 
 
-    def test_pair_relationship_to_project(self):
+    def test_pair_relationship_to_lab(self):
         """ tests that there is a relationship between cohort and pair """
 
         self.assertEqual('Balloonicorn Melon Festival', db.session
             .query(Pair)
-            .join(Project)
+            .join(Lab)
             .first()
-            .project.title
+            .lab.title
             )
 
 
@@ -131,8 +134,7 @@ class RelationshipUnitTests(unittest.TestCase):
 
         self.assertEqual('Beth Happy', db.session
             .query(Pair)
-            .join(Project)
-            .first()
+            .first() # check do I need to have the join (see above)
             .student1.name
             )
 

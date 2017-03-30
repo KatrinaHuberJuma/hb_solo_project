@@ -1,7 +1,11 @@
+
+from connect_to_db import connect_to_db, db
+# from server import app
+
 from flask_sqlalchemy import SQLAlchemy
-from server import app
 
 db = SQLAlchemy()
+
 
 
 class Cohort(db.Model):
@@ -40,25 +44,25 @@ class Student(db.Model):
 
 
 
-class Project(db.Model):
-    """ Project fields """
+class Lab(db.Model):
+    """ Lab fields """
 
-    __tablename__="projects"
+    __tablename__="labs"
 
-    project_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    lab_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
 
 
 
 class Pair(db.Model):
-    """Who paired with whom on which project and what did they learn together"""
+    """Who paired with whom on which lab and what did they learn together"""
 
     __tablename__ = "pairs"
 
     pairing_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    project_id = db.Column(db.Integer,
-                          db.ForeignKey('projects.project_id'),
+    lab_id = db.Column(db.Integer,
+                          db.ForeignKey('labs.lab_id'),
                           nullable=False)
     student_1_id = db.Column(db.Integer,
                           db.ForeignKey('students.student_id'),
@@ -68,11 +72,9 @@ class Pair(db.Model):
                           nullable=False)
     notes = db.Column(db.String)
 
-    project = db.relationship("Project", backref="pairs")
+    lab = db.relationship("Lab", backref="pairs")
     student1 = db.relationship("Student", backref="pairs1", foreign_keys=[student_1_id])
     student2 = db.relationship("Student", backref="pairs2", foreign_keys=[student_2_id])
-
-
 
 
 def connect_to_db(app, db_uri="postgresql:///katcohort"):
@@ -85,12 +87,11 @@ def connect_to_db(app, db_uri="postgresql:///katcohort"):
 
 
 
-
 if __name__ == "__main__":
     # As a convenience, if we run this module interactively, it will leave
     # you in a state of being able to work with the database directly.
 
     from server import app
-    connect_to_db(app, "postgresql:///kattestdb")
+    connect_to_db(app, "postgresql:///katfuntest")
     db.create_all() # this is not "creating the db" it is creating the tables, cols etc
     
