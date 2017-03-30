@@ -21,15 +21,20 @@ def homepage():
 def homepage_post():
     """Handle the signin form inputs"""
 
-    name = request.args.get("name")
-    email = request.args.get("email")
+    name = request.form.get("name")
+    email = request.form.get("email")
 
     valid_user = Student.query.filter((Student.name == name)
                                     & (Student.email == email)).first()
 
+    print "\n\n\n", name, "\n\n\n", email, "\n\n\n", valid_user, "\n\n\n"
+
     if valid_user:
-        user_id = Student.query.filter(Student.name == name).first().student_id
-        session["user_id"] = user_id
+        user = Student.query.filter(Student.name == name).first()
+        session["user_id"] = user.student_id
+        session["cohort_id"] = user.cohort_id
+
+        print session["user_id"], session["cohort_id"]
 
         flash("You are logged in now.")
     else: 
@@ -41,7 +46,7 @@ def homepage_post():
 
 @app.route("/signin")
 def signinpage():
-    """Show homepage"""
+    """Show signin"""
 
     # TODO: if not signed in, redirect to signin page
 
