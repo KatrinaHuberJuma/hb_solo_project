@@ -27,21 +27,20 @@ def homepage_post():
     valid_user = Student.query.filter((Student.name == name)
                                     & (Student.email == email)).first()
 
-    print "\n\n\n", name, "\n\n\n", email, "\n\n\n", valid_user, "\n\n\n"
-
     if valid_user:
         user = Student.query.filter(Student.name == name).first()
         session["user_id"] = user.student_id
         session["cohort_id"] = user.cohort_id
 
-        print session["user_id"], session["cohort_id"]
+        cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
 
         flash("You are logged in now.")
+        return render_template("home.html", cohort_members=cohort_members)
     else: 
         flash("invalid login")
         return redirect("/signin")
 
-    return render_template("home.html")
+    
 
 
 @app.route("/signin")
@@ -52,13 +51,24 @@ def signinpage():
 
     return render_template("signin.html")
 
+@app.route("/signedout")
+def signedout():
+    """Log user out and say goodbye"""
+
+    del session["user_id"]
+    del session["cohort_id"]
+
+    flash("You have signed out")
+
+    return redirect("/signin")
+
 
 if __name__ =="__main__":
 
     app.debug = True # fixme before deployment
     app.jinja_env.auto_reload = app.debug # fixme before deployment
 
-    connect_to_db(app, "postgresql:///katfuntest")
+    connect_to_db(app, "postgresql:///katfuntest") # fixme before deployment
 
     DebugToolbarExtension(app) # fixme before deployment
 

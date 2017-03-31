@@ -49,6 +49,9 @@ class Lab(db.Model):
 
     __tablename__="labs"
 
+    def __repr__():
+        return "< LAB = %s >" % (self.title)
+
     lab_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
@@ -59,6 +62,11 @@ class Pair(db.Model):
     """Who paired with whom on which lab and what did they learn together"""
 
     __tablename__ = "pairs"
+
+    def __repr__(self):
+        return "< LAB id = %s, STUDENT 1 id = %s, STUDENT 2 id = %s >" % (self.lab_id, 
+                                                                    self.student_1_id, 
+                                                                    self.student_2_id)
 
     pairing_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     lab_id = db.Column(db.Integer,
@@ -73,8 +81,10 @@ class Pair(db.Model):
     notes = db.Column(db.String)
 
     lab = db.relationship("Lab", backref="pairs")
-    student1 = db.relationship("Student", backref="pairs1", foreign_keys=[student_1_id])
-    student2 = db.relationship("Student", backref="pairs2", foreign_keys=[student_2_id])
+    student1 = db.relationship("Student", backref="pairs1",
+        foreign_keys=[student_1_id])
+    student2 = db.relationship("Student", backref="pairs2",
+        foreign_keys=[student_2_id])
 
 
 def connect_to_db(app, db_uri="postgresql:///katcohort"):
@@ -88,9 +98,7 @@ def connect_to_db(app, db_uri="postgresql:///katcohort"):
 
 
 if __name__ == "__main__":
-    # As a convenience, if we run this module interactively, it will leave
-    # you in a state of being able to work with the database directly.
-
+  
     from server import app
     connect_to_db(app, "postgresql:///katfuntest")
     db.create_all() # this is not "creating the db" it is creating the tables, cols etc

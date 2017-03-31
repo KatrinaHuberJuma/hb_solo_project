@@ -6,6 +6,11 @@
 
 <h1>Welcome!</h1>
 
-
+<h2>Cohort Members:</h2>
+<ul>
+{% for member in cohort_members %}
+    <li>{{ member.name }}</li>
+{% endfor %}
+</ul>
 
 {% endblock %}

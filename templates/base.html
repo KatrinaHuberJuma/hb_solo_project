@@ -3,6 +3,12 @@
     <title>{% block title %}TITLE HERE{% endblock %}</title>
 </head>
 <body>
+    <nav>
+        {% if "user_id" in session %}
+            <a href="/signedout"><button>Log out</button></a>
+        {% endif %}
+
+    </nav>
   {% for msg in get_flashed_messages() %}
     <div class="alert alert-info">{{ msg }}</div>
   {% endfor %}

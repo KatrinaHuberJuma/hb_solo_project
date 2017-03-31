@@ -1,4 +1,5 @@
 First time:
+    > (drobdb katfuntest)
     > createdb katfuntest
     > source secret.sh
     > python fun_test_seed.py

@@ -2,21 +2,21 @@
 # from connect_to_db import connect_to_db, db
 from model import connect_to_db, db, Cohort, Student, Lab, Pair
 import unittest
-from server import app
+from server import app, session
 
-class ServerTests(unittest.TestCase):
+class ServerUnitTests(unittest.TestCase):
     """ tests routes """
 
     def setUp(self):
         self.client = app.test_client()
         app.config['TESTING'] = True # fixme before deployment
 
-    def test_homepage(self):
+    def test_homepage_route(self):
         # TODO: check the signedout redirect to signin
         result = self.client.get("/")
         self.assertIn("Welcome!", result.data)
 
-    def test_signin(self): 
+    def test_signin_route(self): 
         result = self.client.get("/signin")
         self.assertIn("Please sign in!", result.data)
 
@@ -32,50 +32,10 @@ class RelationshipUnitTests(unittest.TestCase):
         connect_to_db(app, "postgresql:///kattestdb")
         db.create_all()
 
-        bo = Cohort(name="Boudicca")
-        db.session.add(bo)
-        db.session.commit()
-
-        bo_from_db = Cohort.query.first()
-        bo_id = bo_from_db.cohort_id
-
-
-        beth = Student(name="Beth Happy",\
-            github_link="git.hub",\
-            cohort_id=bo_id,\
-            email="gmail.planetsave")
-
-        db.session.add(beth)
-
-        ellen = Student(name="Ellen Bellen",\
-            github_link="hub.git",\
-            cohort_id=bo_id,\
-            email="gmail.gmail")
-
-        db.session.add(ellen)
-
-        mel = Lab(title="Balloonicorn Melon Festival",\
-            description="Balloonicorn's festival of melons")
-        db.session.add(mel)
-
-        db.session.commit()
-
-
-        beth_and_ellen = Student.query.all()
-        a_lab_id = Lab.query.first().lab_id
-
-
-        pa = Pair(lab_id=a_lab_id,\
-            student_1_id=beth_and_ellen[0].student_id,\
-            student_2_id=beth_and_ellen[1].student_id,\
-            notes="We learned soooo much!")
-
-        db.session.add(pa)
-        db.session.commit()
-
 
     def test_cohort_row(self):
         """checks that the test cohort is in the cohorts table"""
+        create_cohort()
 
         self.assertEqual('Boudicca', Cohort.query
             .filter(Cohort.name == 'Boudicca')
@@ -88,6 +48,7 @@ class RelationshipUnitTests(unittest.TestCase):
     def test_student_row(self):
         """ checks that 'Beth Happy' was correctly added to database """
 
+        create_students()
 
         self.assertEqual('Beth Happy', Student.query
             .filter(Student.name == 'Beth Happy')
@@ -98,6 +59,8 @@ class RelationshipUnitTests(unittest.TestCase):
 
     def test_student_to_cohort_relation(self):
         """Checks that the relationship between students and cohorts is correct"""
+
+        create_students()
 
         self.assertEqual('Boudicca', db.session
             .query(Student)
@@ -111,6 +74,8 @@ class RelationshipUnitTests(unittest.TestCase):
     def test_lab_row(self):
         """ tests that a row was added to the labss table """
 
+        create_lab()
+
         self.assertEqual('Balloonicorn Melon Festival', Lab.query
             .filter(Lab.title == 'Balloonicorn Melon Festival')
             .one()
@@ -120,6 +85,8 @@ class RelationshipUnitTests(unittest.TestCase):
 
     def test_pair_relationship_to_lab(self):
         """ tests that there is a relationship between cohort and pair """
+
+        create_pair()
 
         self.assertEqual('Balloonicorn Melon Festival', db.session
             .query(Pair)
@@ -131,6 +98,8 @@ class RelationshipUnitTests(unittest.TestCase):
 
     def test_pair_relationship_to_student(self):
         """ tests that there is a relationship between cohort and pair """
+
+        create_pair()
 
         self.assertEqual('Beth Happy', db.session
             .query(Pair)
@@ -148,10 +117,96 @@ class RelationshipUnitTests(unittest.TestCase):
 
 
 
+
+
+class ModelServerIntegration(unittest.TestCase):
+    """Tests that the database content displays correctly on the webpages"""
+
+    def setUp(self):
+        """Should connect to test db (kattestdb) and populate tables for testing"""
+
+        self.client = app.test_client()
+        app.config['TESTING'] = True # fixme before deployment
+
+        connect_to_db(app, "postgresql:///kattestdb")
+        db.create_all()
+        test_seed()
+
+
+
+
+###########################
+#HELPERS
+###########################
+
+def create_cohort():
+    """Adds a cohort to the database"""
+
+    bo = Cohort(name="Boudicca")
+    db.session.add(bo)
+    db.session.commit()
+
+
+def create_students():
+    """Adds two students (of one cohort) to the database"""
+
+    create_cohort()
+
+    bo_from_db = Cohort.query.first()
+    bo_id = bo_from_db.cohort_id
+
+
+    beth = Student(name="Beth Happy",\
+        github_link="git.hub",\
+        cohort_id=bo_id,\
+        email="gmail.planetsave")
+
+    db.session.add(beth)
+
+    ellen = Student(name="Ellen Bellen",\
+        github_link="hub.git",\
+        cohort_id=bo_id,\
+        email="gmail.gmail")
+
+    db.session.add(ellen)
+    db.session.commit()
+
+
+def create_lab():
+    """Adds a lab to the database"""
+
+    mel = Lab(title="Balloonicorn Melon Festival",\
+        description="Balloonicorn's festival of melons")
+    db.session.add(mel)
+    db.session.commit()
+
+
+def create_pair():
+    """Creates a relationship between two students and a lab"""
+
+    create_students()
+    create_lab()
+
+    beth_and_ellen = Student.query.all()
+    a_lab_id = Lab.query.first().lab_id
+
+
+    pa = Pair(lab_id=a_lab_id,\
+        student_1_id=beth_and_ellen[0].student_id,\
+        student_2_id=beth_and_ellen[1].student_id,\
+        notes="We learned soooo much!")
+
+    db.session.add(pa)
+    db.session.commit()
+
+
+
+
+
+
 if __name__ == "__main__":
     unittest.main()
 
 
 # def print_my_tables():
 #     pass
-    
