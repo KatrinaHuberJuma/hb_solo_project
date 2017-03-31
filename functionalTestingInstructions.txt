@@ -1,5 +1,37 @@
-First time:
+In terminal
+    cd into this directory
+    > source env/bin/activate
     > (drobdb katfuntest)
-    > createdb katfuntest
+    > (createdb katfuntest)
     > source secret.sh
     > python fun_test_seed.py
+    > python server.py
+
+
+#################################################
+   This reflects intentions, not current state
+#################################################
+
+
+In browser: 
+    * go to http://localhost:5000/          ==> you should see "Welcome" and login button
+    
+    * click signin button                   ==> you should be taken to the signin page
+    
+    * sign in as: 
+        Beth Happy | gmail.planetsave       ==> you should be taken back to '/' 
+                                                but this time the cohort members
+                                                should be displayed and nav buttons 
+                                                should be logout, labs and home
+    
+    * click "Ellen Bellen"                  ==> you should be taken to her profile
+                                                you should see her name (a link), picture, github link
+                                                buttons should be logout, labs and home
+
+    * click labs button                     ==> you should see a list of the labs (links),
+                                                ordered reverse chornologically
+                                                buttons should be logout, labs and home
+
+    * click "Balloonicorn Melon Festival"   ==> You should see lab title, date, description
+                                                pair combinations and their notes
+                                                buttons should be logout, labs and home

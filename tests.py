@@ -16,7 +16,6 @@ class ServerUnitTests(unittest.TestCase):
         app.config['TESTING'] = True # fixme before deployment
 
     def test_homepage_route(self):
-        # TODO: check the signedout redirect to signin
         result = self.client.get("/")
         self.assertIn("Welcome!", result.data)
 
@@ -165,7 +164,7 @@ class ModelServerIntegration(unittest.TestCase):
         create_labs()
 
         result = self.client.get("/labs")
-        self.assertIn("Lab History", result.data)
+        self.assertIn("Yay", result.data)
 
 ######################################################
 #HELPERS
