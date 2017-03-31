@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %} Kat Project Profile {% endblock %}
+
+{% block content %}
+
+<h1>{{ student_details.name }}</h1>
+
+{% if student_details.student_id == session["user_id"] %}
+    <h2>Hey {{ student_details.name }}! Welcome to your own profile!</h2>
+{% endif %}
+
+
+{% endblock %}

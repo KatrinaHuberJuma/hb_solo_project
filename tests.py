@@ -4,6 +4,10 @@ from model import connect_to_db, db, Cohort, Student, Lab, Pair
 import unittest
 from server import app, session
 
+######################################################
+#TESTS FOR THE SERVER ALONE
+######################################################
+
 class ServerUnitTests(unittest.TestCase):
     """ tests routes """
 
@@ -21,7 +25,9 @@ class ServerUnitTests(unittest.TestCase):
         self.assertIn("Please sign in!", result.data)
 
 
-
+######################################################
+#TESTS FOR THE DATABASE ALONE
+######################################################
 
 class RelationshipUnitTests(unittest.TestCase):
     """Tests that the classes in model correctly polulate a database"""
@@ -32,6 +38,11 @@ class RelationshipUnitTests(unittest.TestCase):
         connect_to_db(app, "postgresql:///kattestdb")
         db.create_all()
 
+    def tearDown(self):
+        """Should close the session and drop all tables"""
+
+        db.session.close()
+        db.drop_all()
 
     def test_cohort_row(self):
         """checks that the test cohort is in the cohorts table"""
@@ -108,15 +119,9 @@ class RelationshipUnitTests(unittest.TestCase):
             )
 
 
-
-    def tearDown(self):
-        """Should close the session and drop all tables"""
-
-        db.session.close()
-        db.drop_all()
-
-
-
+######################################################
+#TESTS FOR THE DATABASE AND SERVER INTEGRATION
+######################################################
 
 
 class ModelServerIntegration(unittest.TestCase):
@@ -130,14 +135,34 @@ class ModelServerIntegration(unittest.TestCase):
 
         connect_to_db(app, "postgresql:///kattestdb")
         db.create_all()
-        test_seed()
 
+    def tearDown(self):
+        """Should close the session and drop all tables"""
 
+        db.session.close()
+        db.drop_all()
 
+    def test_display_cohort_members(self):
 
-###########################
+        create_students()
+
+        result = self.client.post("/",
+                                   data={"name":"Beth Happy",
+                                         "email":"gmail.planetsave"})
+        self.assertIn("<li>Ellen Bellen</li>", result.data)
+
+    def test_profile(self):
+
+        create_students()
+
+        result = self.client.get("/2-profile")
+        self.assertIn("This is Ellen Bellen's profile", result.data)
+
+######################################################
 #HELPERS
-###########################
+######################################################
+
+
 
 def create_cohort():
     """Adds a cohort to the database"""
@@ -206,7 +231,3 @@ def create_pair():
 
 if __name__ == "__main__":
     unittest.main()
-
-
-# def print_my_tables():
-#     pass

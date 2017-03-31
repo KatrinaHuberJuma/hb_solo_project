@@ -55,6 +55,7 @@ class Lab(db.Model):
     lab_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
+    date = db.Column(db.DateTime)
 
 
 

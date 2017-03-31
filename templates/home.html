@@ -6,11 +6,13 @@
 
 <h1>Welcome!</h1>
 
-<h2>Cohort Members:</h2>
-<ul>
-{% for member in cohort_members %}
-    <li>{{ member.name }}</li>
-{% endfor %}
-</ul>
+{% if "user_id" in session %}
+    <h2>Cohort Members:</h2>
+    <ul>
+        {% for member in cohort_members %}
+            <li><a href="{{ member.student_id}}-profile">{{ member.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
 {% endblock %}

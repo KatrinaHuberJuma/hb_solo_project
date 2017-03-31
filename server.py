@@ -63,6 +63,16 @@ def signedout():
     return redirect("/signin")
 
 
+@app.route("/<student_id>-profile")
+def display_profile(student_id):
+    """Display a student profile"""
+
+    student_details = Student.query.filter(Student.student_id == student_id).one()
+
+    return render_template("profile.html", student_details=student_details)
+
+
+
 if __name__ =="__main__":
 
     app.debug = True # fixme before deployment
