@@ -33,6 +33,10 @@ if safe_to_proceed == 'y':
         description="Balloonicorn's festival of melons")
     db.session.add(mel)
 
+    yay = Lab(title="Yay",\
+        description="Labs are great")
+    db.session.add(yay)
+
     db.session.commit()
 
 

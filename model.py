@@ -49,13 +49,13 @@ class Lab(db.Model):
 
     __tablename__="labs"
 
-    def __repr__():
+    def __repr__(self):
         return "< LAB = %s >" % (self.title)
 
     lab_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
-    date = db.Column(db.DateTime)
+    # date = db.Column(db.DateTime, nullable=True)
 
 
 

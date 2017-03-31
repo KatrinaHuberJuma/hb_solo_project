@@ -20,9 +20,11 @@ class ServerUnitTests(unittest.TestCase):
         result = self.client.get("/")
         self.assertIn("Welcome!", result.data)
 
-    def test_signin_route(self): 
+    def test_signin_route(self):
         result = self.client.get("/signin")
         self.assertIn("Please sign in!", result.data)
+
+
 
 
 ######################################################
@@ -83,9 +85,9 @@ class RelationshipUnitTests(unittest.TestCase):
         
 
     def test_lab_row(self):
-        """ tests that a row was added to the labss table """
+        """ tests that a row was added to the labs table """
 
-        create_lab()
+        create_labs()
 
         self.assertEqual('Balloonicorn Melon Festival', Lab.query
             .filter(Lab.title == 'Balloonicorn Melon Festival')
@@ -149,7 +151,7 @@ class ModelServerIntegration(unittest.TestCase):
         result = self.client.post("/",
                                    data={"name":"Beth Happy",
                                          "email":"gmail.planetsave"})
-        self.assertIn("<li>Ellen Bellen</li>", result.data)
+        self.assertIn("Ellen Bellen", result.data)
 
     def test_profile(self):
 
@@ -157,6 +159,13 @@ class ModelServerIntegration(unittest.TestCase):
 
         result = self.client.get("/2-profile")
         self.assertIn("This is Ellen Bellen's profile", result.data)
+
+
+    def test_labs_route(self):
+        create_labs()
+
+        result = self.client.get("/labs")
+        self.assertIn("Lab History", result.data)
 
 ######################################################
 #HELPERS
@@ -197,12 +206,17 @@ def create_students():
     db.session.commit()
 
 
-def create_lab():
+def create_labs():
     """Adds a lab to the database"""
 
     mel = Lab(title="Balloonicorn Melon Festival",\
         description="Balloonicorn's festival of melons")
     db.session.add(mel)
+
+    yay = Lab(title="Yay",\
+        description="Labs are great")
+    db.session.add(yay)
+
     db.session.commit()
 
 
@@ -210,7 +224,7 @@ def create_pair():
     """Creates a relationship between two students and a lab"""
 
     create_students()
-    create_lab()
+    create_labs()
 
     beth_and_ellen = Student.query.all()
     a_lab_id = Lab.query.first().lab_id

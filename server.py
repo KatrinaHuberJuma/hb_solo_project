@@ -71,7 +71,15 @@ def display_profile(student_id):
 
     return render_template("profile.html", student_details=student_details)
 
+@app.route("/labs")
+def labs():
+    """display the lab history"""
 
+    labs = Lab.query.all()
+
+    print labs
+
+    return render_template("labs.html", labs=labs)
 
 if __name__ =="__main__":
 

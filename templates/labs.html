@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} Kat Project Profile {% endblock %}
+
+{% block content %}
+
+<h1>Lab History</h1>
+
+<ul>
+    {% for lab in labs %}
+        <li><a href="{{ lab.lab_id}}-lab-details">{{ lab.title }}</a></li>
+    {% endfor %}
+</ul>
+
+<p>ATTENTION KATRINA! don't forget: each lab should be related to a cohort. make that relationship and necessary adjustments. This page should display the labs for a given cohort!!!!!!!!!!!!!!!</p>
+<p>ALSO: labs should have the date</p>
+
+{% endblock %}
