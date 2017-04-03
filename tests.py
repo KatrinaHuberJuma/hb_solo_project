@@ -56,7 +56,6 @@ class RelationshipUnitTests(unittest.TestCase):
             )
 
 
-
     def test_student_row(self):
         """ checks that 'Beth Happy' was correctly added to database """
 
