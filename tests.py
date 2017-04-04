@@ -201,6 +201,13 @@ class ModelServerIntegration(unittest.TestCase):
         result = self.client.get("/labs")
         self.assertIn("Yay", result.data)
 
+    def test_lab_details(self):
+
+        create_labs()
+
+        result = self.client.get("/1-lab-details")
+        self.assertIn("Balloonicorn Melon Festival", result.data)
+
 ######################################################
 #HELPERS
 ######################################################

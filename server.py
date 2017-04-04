@@ -79,6 +79,13 @@ def labs():
 
     return render_template("labs.html", labs=labs)
 
+@app.route("/<lab_id>-lab-details")
+def lab_details(lab_id):
+    """Display details of a lab"""
+
+    lab = Lab.query.get(lab_id)
+
+    return render_template("lab_page.html", lab=lab)
 
 
 ################################################################################
