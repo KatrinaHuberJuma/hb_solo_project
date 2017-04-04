@@ -8,7 +8,7 @@
 
 <ul>
     {% for lab in labs %}
-        <li><a href="{{ lab.lab_id}}-lab-details">{{ lab.title }}</a></li>
+        <li><a href="{{url_for('lab_details', lab_id = lab.lab_id)}}">{{ lab.title }}</a></li>
     {% endfor %}
 </ul>
 

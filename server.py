@@ -15,7 +15,9 @@ app.secret_key = os.environ['secret_key']
 def homepage():
     """Show homepage"""
 
-    return render_template("home.html")
+    cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
+
+    return render_template("home.html", cohort_members=cohort_members)
 
 @app.route("/", methods=["POST"])
 def homepage_post():
@@ -24,13 +26,13 @@ def homepage_post():
     name = request.form.get("name")
     email = request.form.get("email")
 
-    valid_user = Student.query.filter((Student.name == name)
+    valid_student = Student.query.filter((Student.name == name)
                                     & (Student.email == email)).first()
 
-    if valid_user:
-        user = Student.query.filter(Student.name == name).first()
-        session["user_id"] = user.student_id
-        session["cohort_id"] = user.cohort_id
+    if valid_student:
+        student = Student.query.filter(Student.name == name).first()
+        session["student_id"] = student.student_id
+        session["cohort_id"] = student.cohort_id
 
         cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
 
@@ -55,7 +57,7 @@ def signinpage():
 def signedout():
     """Log user out and say goodbye"""
 
-    del session["user_id"]
+    del session["student_id"]
     del session["cohort_id"]
 
     flash("You have signed out")
@@ -75,17 +77,22 @@ def display_profile(student_id):
 def labs():
     """display the lab history"""
 
-    labs = Lab.query.all()
+    labs = Lab.query.all() # TODO specify cohort
 
     return render_template("labs.html", labs=labs)
 
-@app.route("/<lab_id>-lab-details")
+@app.route("/lab/<lab_id>")
 def lab_details(lab_id):
     """Display details of a lab"""
 
     lab = Lab.query.get(lab_id)
+    pairs = Pair.query.filter(Pair.lab_id == lab_id, \
+        db.or_(Pair.student_1_id == session["student_id"],\
+        Pair.student_2_id == session["student_id"])).all() #pair.student1 etc
 
-    return render_template("lab_page.html", lab=lab)
+    keywords = [ x.keyword for x in lab.labs_keywords]
+
+    return render_template("lab_page.html", lab=lab, keywords=keywords, pairs=pairs)
 
 
 ################################################################################

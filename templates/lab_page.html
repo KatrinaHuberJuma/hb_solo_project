@@ -6,7 +6,25 @@
 
 <h1>{{ lab.title }}</h1>
 
-<p>{{ lab.description }}</p>
+<h2>{{ lab.description }}</h2>
+
+
+
+<!-- {{ lab.date }} -->
+<ul>
+    {% for pair in pairs %}
+    <li><h3>{{ pair.student1.name }} paired with {{ pair.student2.name }}</h3>
+        notes: {{ pair.notes }}</li>
+    {% endfor %}
+</ul>
+
+
+<h4>Keywords:</h4>
+<ul>
+    {% for keyword in keywords %}
+    <li><h5>{{ keyword.keyword }} </h5></li>
+    {% endfor %}
+</ul>
 
 
 {% endblock %}

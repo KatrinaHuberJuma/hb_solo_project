@@ -10,6 +10,7 @@ class Admin(db.Model):
     """admin fields"""
 
     __tablename__ = "admins"
+    # add repr
 
     admin_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50))
@@ -56,7 +57,7 @@ class Student(db.Model):
     cohort_id = db.Column(db.Integer,
                           db.ForeignKey('cohorts.cohort_id'),
                           nullable=False)
-    email = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(20), nullable=False) # unique
     password = db.Column(db.String(20), nullable=False)
     demo_vid = db.Column(db.String(100))
     profile_pic = db.Column(db.String(100))
@@ -161,3 +162,9 @@ if __name__ == "__main__":
     connect_to_db(app, "postgresql:///katfuntest")
     db.create_all() # this is not "creating the db" it is creating the tables, cols etc
     
+
+
+    #############################
+#     Lab.query.filter(Lab.lab_id==1).join(LabKeyword).join(Keyword).first()
+
+# db.session.query(Lab).join(Lab.lab_id==LabKeyword.lab_id).join(LabKeyword.keyword_id==Keyword).keywords.all()

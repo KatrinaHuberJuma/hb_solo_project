@@ -132,14 +132,14 @@ class RelationshipUnitTests(unittest.TestCase):
     def test_keyword_created(self):
         """Tests that the keywords table exists and has an added keyword"""
 
-        create_keyword()
+        create_keywords()
 
         self.assertEqual("word", Keyword.query.first().keyword)
 
     def test_lab_keyword_association(self):
         """Tests that a lab and a keyword can be associated through the labs_keywords table"""
 
-        associate_lab_to_keyword()
+        associate_labs_to_keywords()
 
         # Session.query(Articles).filter(Articles.article_id == ArticleTags.article_id).\
         # filter(ArticleTags.tag_id == Tags.tag_id).\
@@ -205,8 +205,14 @@ class ModelServerIntegration(unittest.TestCase):
 
         create_labs()
 
-        result = self.client.get("/1-lab-details")
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess["user_id"] = 1
+
+        result = self.client.get("/lab/1")
         self.assertIn("Balloonicorn Melon Festival", result.data)
+        self.assertIn("Ellen Bellen", result.data)
+        self.assertIn("word", result.data)
 
 ######################################################
 #HELPERS
@@ -251,9 +257,6 @@ def create_students():
         cohort_id=bo_id,\
         email="gmail.planetsave",
         password="pw")
-######################################################
-#HELPERS
-######################################################
 
     db.session.add(beth)
 
@@ -300,22 +303,30 @@ def create_pair():
     db.session.commit()
 
 
-def create_keyword():
+def create_keywords():
     kw = Keyword(keyword="word")
+    kw2 = Keyword(keyword="key")
 
     db.session.add(kw)
+    db.session.add(kw2)
     db.session.commit()
 
-def associate_lab_to_keyword():
-    create_labs()
-    create_keyword()
+def associate_labs_to_keywords():
+    create_pair()
+    create_keywords()
 
-    lab_id = Lab.query.first().lab_id
-    keyword = Keyword.query.first().keyword_id
+    lab_1_id = Lab.query.get(1).lab_id
+    keyword_1 = Keyword.query.get(1).keyword_id
 
-    lw = LabKeyword(lab_id=lab_id, keyword_id=keyword)
+    lab_2_id = Lab.query.get(2).lab_id
+    keyword_2 = Keyword.query.get(2).keyword_id
 
-    db.session.add(lw)
+    lw1 = LabKeyword(lab_id=lab_1_id, keyword_id=keyword_1)
+
+    lw2 = LabKeyword(lab_id=lab_2_id, keyword_id=keyword_2)
+
+    db.session.add(lw1)
+    db.session.add(lw2)
     db.session.commit()
 
 
