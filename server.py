@@ -77,9 +77,11 @@ def labs():
 
     labs = Lab.query.all()
 
-    print labs
-
     return render_template("labs.html", labs=labs)
+
+
+
+################################################################################
 
 if __name__ =="__main__":
 

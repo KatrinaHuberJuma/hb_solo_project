@@ -1,6 +1,6 @@
 
 # from connect_to_db import connect_to_db, db
-from model import connect_to_db, db, Cohort, Student, Lab, Pair
+from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
 import unittest
 from server import app, session
 
@@ -44,6 +44,17 @@ class RelationshipUnitTests(unittest.TestCase):
 
         db.session.close()
         db.drop_all()
+
+    def test_admin_row(self):
+        """checks that 'Addy Gladdy' was correctly added to the database"""
+
+        create_admin()
+
+        self.assertEqual('greatness.git', Admin.query
+            .filter(Admin.name == 'Addy Gladdy')
+            .first()
+            .github_link
+            )
 
     def test_cohort_row(self):
         """checks that the test cohort is in the cohorts table"""
@@ -118,6 +129,31 @@ class RelationshipUnitTests(unittest.TestCase):
             .student1.name
             )
 
+    def test_keyword_created(self):
+        """Tests that the keywords table exists and has an added keyword"""
+
+        create_keyword()
+
+        self.assertEqual("word", Keyword.query.first().keyword)
+
+    def test_lab_keyword_association(self):
+        """Tests that a lab and a keyword can be associated through the labs_keywords table"""
+
+        associate_lab_to_keyword()
+
+        # Session.query(Articles).filter(Articles.article_id == ArticleTags.article_id).\
+        # filter(ArticleTags.tag_id == Tags.tag_id).\
+        # filter(Tags.name == 'tag_name')
+
+        self.assertEqual('word', db.session
+            .query(LabKeyword)
+            .filter(Lab.lab_id==LabKeyword.lab_id)
+            .filter(LabKeyword.keyword_id==Keyword.keyword_id)
+            .first().keyword.keyword
+            )
+
+
+
 
 ######################################################
 #TESTS FOR THE DATABASE AND SERVER INTEGRATION
@@ -170,11 +206,26 @@ class ModelServerIntegration(unittest.TestCase):
 ######################################################
 
 
+def create_admin():
+    """creates an admin in the admins table"""
+
+    ad = Admin(name="Addy Gladdy", 
+        github_link="greatness.git",
+        email="awesome.awe",
+        profile_pic="so pretty picture",
+        password="pw")
+
+    db.session.add(ad)
+    db.session.commit()
+
 
 def create_cohort():
     """Adds a cohort to the database"""
+    create_admin()
 
-    bo = Cohort(name="Boudicca")
+    admin_id = Admin.query.first().admin_id
+
+    bo = Cohort(name="Boudicca", password="secretpw", admin_id=admin_id)
     db.session.add(bo)
     db.session.commit()
 
@@ -191,14 +242,19 @@ def create_students():
     beth = Student(name="Beth Happy",\
         github_link="git.hub",\
         cohort_id=bo_id,\
-        email="gmail.planetsave")
+        email="gmail.planetsave",
+        password="pw")
+######################################################
+#HELPERS
+######################################################
 
     db.session.add(beth)
 
     ellen = Student(name="Ellen Bellen",\
         github_link="hub.git",\
         cohort_id=bo_id,\
-        email="gmail.gmail")
+        email="gmail.gmail",
+        password="pw")
 
     db.session.add(ellen)
     db.session.commit()
@@ -237,8 +293,26 @@ def create_pair():
     db.session.commit()
 
 
+def create_keyword():
+    kw = Keyword(keyword="word")
+
+    db.session.add(kw)
+    db.session.commit()
+
+def associate_lab_to_keyword():
+    create_labs()
+    create_keyword()
+
+    lab_id = Lab.query.first().lab_id
+    keyword = Keyword.query.first().keyword_id
+
+    lw = LabKeyword(lab_id=lab_id, keyword_id=keyword)
+
+    db.session.add(lw)
+    db.session.commit()
 
 
+################################################################################
 
 
 if __name__ == "__main__":
