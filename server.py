@@ -20,17 +20,17 @@ def homepage():
 
         return render_template("home.html", cohort_members=cohort_members)
     else:
-        return redirect("/signin")
+        return redirect("/signin") #TODO
 
 @app.route("/", methods=["POST"])
 def homepage_post():
     """Handle the signin form inputs"""
 
     name = request.form.get("name")
-    email = request.form.get("email")
+    password = request.form.get("password")
 
     valid_student = Student.query.filter((Student.name == name)
-                                    & (Student.email == email)).first()
+                                    & (Student.password == password)).first()
 
     if valid_student:
         

@@ -214,7 +214,7 @@ class ModelServerIntegration(unittest.TestCase):
 
         result = self.client.post("/",
                                    data={"name":"Beth Happy",
-                                         "email":"gmail.planetsave"})
+                                         "password":"pw"})
         self.assertIn("Ellen Bellen", result.data)
 
     def test_profile(self):
