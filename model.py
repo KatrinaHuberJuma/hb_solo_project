@@ -77,9 +77,13 @@ class Lab(db.Model):
 
     lab_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(50), nullable=False)
+    cohort_id = db.Column(db.Integer,
+                          db.ForeignKey('cohorts.cohort_id'),
+                          nullable=False)
     description = db.Column(db.String)
     date = db.Column(db.DateTime)
 
+    cohort = db.relationship("Cohort", backref="labs")
 
 
 class Pair(db.Model):

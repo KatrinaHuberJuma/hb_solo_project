@@ -15,9 +15,12 @@ app.secret_key = os.environ['secret_key']
 def homepage():
     """Show homepage"""
 
-    cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
+    if "cohort_id" in session:
+        cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
 
-    return render_template("home.html", cohort_members=cohort_members)
+        return render_template("home.html", cohort_members=cohort_members)
+    else:
+        return redirect("/signin")
 
 @app.route("/", methods=["POST"])
 def homepage_post():
