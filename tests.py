@@ -15,10 +15,6 @@ class ServerUnitTests(unittest.TestCase):
         self.client = app.test_client()
         app.config['TESTING'] = True # fixme before deployment
 
-    def test_homepage_route(self):
-        result = self.client.get("/")
-        self.assertIn("Welcome!", result.data)
-
     def test_signin_route(self):
         result = self.client.get("/signin")
         self.assertIn("Please sign in!", result.data)
@@ -141,8 +137,8 @@ class RelationshipUnitTests(unittest.TestCase):
 
         associate_labs_to_keywords()
 
-        # Session.query(Articles).filter(Articles.article_id == ArticleTags.article_id).\
-        # filter(ArticleTags.tag_id == Tags.tag_id).\
+        # Session.query(Articles).filter(Articles.article_id == ArticleTags.article_id).
+        # filter(ArticleTags.tag_id == Tags.tag_id).
         # filter(Tags.name == 'tag_name')
 
         self.assertEqual('word', db.session
@@ -178,9 +174,25 @@ class ModelServerIntegration(unittest.TestCase):
         db.session.close()
         db.drop_all()
 
+    # def test_admin_create_cohort(self):
+    #     """Tests that a singed in admin can create a cohort"""
+
+    #     create_admin()
+
+    #     result = self.client.post("/new-cohort",
+    #                                data={"cohort_name":"New Cohort",
+    #                                      "password":"pw"})
+    #     self.assertIn("Ellen Bellen", result.data)
+
+
     def test_display_cohort_members(self):
 
         create_students()
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess["student_id"] = 1
+                sess["cohort_id"] = 1
 
         result = self.client.post("/",
                                    data={"name":"Beth Happy",
@@ -203,11 +215,11 @@ class ModelServerIntegration(unittest.TestCase):
 
     def test_lab_details(self):
 
-        create_labs()
+        associate_labs_to_keywords()
 
         with self.client as c:
             with c.session_transaction() as sess:
-                sess["user_id"] = 1
+                sess["student_id"] = 1
 
         result = self.client.get("/lab/1")
         self.assertIn("Balloonicorn Melon Festival", result.data)
@@ -252,17 +264,17 @@ def create_students():
     bo_id = bo_from_db.cohort_id
 
 
-    beth = Student(name="Beth Happy",\
-        github_link="git.hub",\
-        cohort_id=bo_id,\
+    beth = Student(name="Beth Happy",
+        github_link="git.hub",
+        cohort_id=bo_id,
         email="gmail.planetsave",
         password="pw")
 
     db.session.add(beth)
 
-    ellen = Student(name="Ellen Bellen",\
-        github_link="hub.git",\
-        cohort_id=bo_id,\
+    ellen = Student(name="Ellen Bellen",
+        github_link="hub.git",
+        cohort_id=bo_id,
         email="gmail.gmail",
         password="pw")
 
@@ -273,11 +285,11 @@ def create_students():
 def create_labs():
     """Adds a lab to the database"""
 
-    mel = Lab(title="Balloonicorn Melon Festival",\
+    mel = Lab(title="Balloonicorn Melon Festival",
         description="Balloonicorn's festival of melons")
     db.session.add(mel)
 
-    yay = Lab(title="Yay",\
+    yay = Lab(title="Yay",
         description="Labs are great")
     db.session.add(yay)
 
@@ -294,9 +306,9 @@ def create_pair():
     a_lab_id = Lab.query.first().lab_id
 
 
-    pa = Pair(lab_id=a_lab_id,\
-        student_1_id=beth_and_ellen[0].student_id,\
-        student_2_id=beth_and_ellen[1].student_id,\
+    pa = Pair(lab_id=a_lab_id,
+        student_1_id=beth_and_ellen[0].student_id,
+        student_2_id=beth_and_ellen[1].student_id,
         notes="We learned soooo much!")
 
     db.session.add(pa)

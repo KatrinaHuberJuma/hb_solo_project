@@ -30,19 +30,21 @@ def homepage_post():
                                     & (Student.email == email)).first()
 
     if valid_student:
+        
         student = Student.query.filter(Student.name == name).first()
         session["student_id"] = student.student_id
         session["cohort_id"] = student.cohort_id
-
-        cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
+        cohort_members = Student.query.filter(Student.cohort_id ==
+            session["cohort_id"]).all()
 
         flash("You are logged in now.")
-        return render_template("home.html", cohort_members=cohort_members)
+        html = render_template("home.html", cohort_members=cohort_members)
+        # print html
+        return html
     else: 
         flash("invalid login")
         return redirect("/signin")
 
-    
 
 
 @app.route("/signin")
@@ -57,8 +59,9 @@ def signinpage():
 def signedout():
     """Log user out and say goodbye"""
 
-    del session["student_id"]
-    del session["cohort_id"]
+    if "student_id" in session:
+        del session["student_id"]
+        del session["cohort_id"]
 
     flash("You have signed out")
 
