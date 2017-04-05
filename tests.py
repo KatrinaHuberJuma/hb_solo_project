@@ -200,8 +200,23 @@ class ModelServerIntegration(unittest.TestCase):
     #                                      "password":"pw"})
     #     self.assertIn("Ellen Bellen", result.data)
 
+    def test_display_cohorts_admin(self):
 
-    def test_display_cohort_members(self):
+        create_admin()
+        create_cohort()
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess["admin_id"] = 1
+
+        result = self.client.post("/",
+                                   data={"name":"Addy Gladdy",
+                                         "password":"pw",
+                                         "permissions": "admin"})
+        self.assertIn("Boudicca", result.data)
+
+
+    def test_display_cohort_members_to_student(self):
 
         create_admin()
         create_cohort()
@@ -214,7 +229,8 @@ class ModelServerIntegration(unittest.TestCase):
 
         result = self.client.post("/",
                                    data={"name":"Beth Happy",
-                                         "password":"pw"})
+                                         "password":"pw",
+                                         "permissions": "student"})
         self.assertIn("Ellen Bellen", result.data)
 
     def test_profile(self):
