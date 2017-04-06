@@ -5,7 +5,7 @@ from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword,
 
 from flask import Flask, session, render_template, request, jsonify, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
-import os
+import os, sys
 
 app = Flask(__name__)
 app.secret_key = os.environ['secret_key']
@@ -19,6 +19,13 @@ def homepage():
         cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
 
         return render_template("home.html", cohort_members=cohort_members)
+
+    elif "admin_id" in session:
+
+        cohorts = Cohort.query.filter(Cohort.admin_id == session["admin_id"]).all()
+
+        return render_template("home.html", cohorts=cohorts)
+
     else:
         return redirect("/signin") #TODO
 
@@ -135,19 +142,16 @@ def add_cohort():
     most_recent = db.session.query(Cohort).order_by(Cohort.cohort_id.desc()).first()
 
     if most_recent.name == new_cohort_name and most_recent.password == new_cohort_password:
-        response = {"string": most_recent.name}
+        response = {
+                    "string": most_recent.name,
+                    "createdId": most_recent.cohort_id}
 
     else:
         response = {"string": "Not added"}
 
 
+
     return jsonify(response)
-
-
-
-
-
-
 
 
 
@@ -161,9 +165,16 @@ if __name__ =="__main__":
 
     app.debug = True # fixme before deployment
     app.jinja_env.auto_reload = app.debug # fixme before deployment
+    
 
-    connect_to_db(app, "postgresql:///katfuntest") # fixme before deployment
+    if len(sys.argv) > 1 and sys.argv[1].lower() == 'testing':
+        app.config['TESTING'] = True  
+    else:
+        app.config['TESTING'] = False
 
+        
+    database_uri = "postgresql:///kattestdb" if app.config['TESTING'] else "postgresql:///katfuntest"
+    connect_to_db(app, database_uri) # fixme before deployment
     DebugToolbarExtension(app) # fixme before deployment
 
     app.run(port=5000, host='0.0.0.0')

@@ -4,8 +4,12 @@ function showNewCohort(results) {
     // display 
 
     var resultString = results.string
+    var resultId = results.createdId
 
-    $("#cohort-list").append("<li>" + resultString + "</li>")
+    $("#cohort-list").append("<li id='new-cohort'><a href='" + resultId + "'>" + resultString + "</a></li>")
+
+    $("#enter-cohort-name").val("")
+    $("#enter-cohort-password").val("")
 }
 
 function submitNewCohortInfo(evt) {
