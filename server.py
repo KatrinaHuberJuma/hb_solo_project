@@ -3,7 +3,7 @@
 # from connect_to_db import connect_to_db, db
 from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
 
-from flask import Flask, session, render_template, request, flash, redirect
+from flask import Flask, session, render_template, request, jsonify, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 import os
 
@@ -40,10 +40,8 @@ def homepage_post():
             session["admin_id"] = admin.admin_id
             cohorts = Cohort.query.filter(Cohort.admin_id == admin.admin_id).all()
             
+            flash("You are logged in now.")
             return render_template("home.html", cohorts=cohorts)
-
-
-
 
     elif permissions == "student":
         valid_student = Student.query.filter((Student.name == name)
@@ -116,6 +114,45 @@ def lab_details(lab_id):
     keywords = [ x.keyword for x in lab.labs_keywords]
 
     return render_template("lab_page.html", lab=lab, keywords=keywords, pairs=pairs)
+
+
+@app.route("/add-cohort", methods=["POST"])
+def add_cohort():
+    """Allow admin to create a cohort"""
+    print "this happened"
+
+    new_cohort_name = request.form.get("new-cohort-name")
+    new_cohort_password = request.form.get("new-cohort-password")
+    admin_id = session["admin_id"]
+
+    new_cohort = Cohort(name=new_cohort_name,
+        password=new_cohort_password,
+        admin_id=admin_id)
+
+    db.session.add(new_cohort)
+    db.session.commit()
+
+    most_recent = db.session.query(Cohort).order_by(Cohort.cohort_id.desc()).first()
+
+    if most_recent.name == new_cohort_name and most_recent.password == new_cohort_password:
+        response = {"string": most_recent.name}
+
+    else:
+        response = {"string": "Not added"}
+
+
+    return jsonify(response)
+
+
+
+
+
+
+
+
+
+
+
 
 
 ################################################################################
