@@ -17,7 +17,7 @@
     <h2>Cohorts:</h2>
     <ul id="cohort-list">
         {% for cohort in cohorts %}
-            <li><a href="{{ cohort.cohort_id }}-TODO: add cohort_id to session">{{ cohort.name }}</a></li>
+            <li><a href="{{ cohort.cohort_id }}-TODO: add cohort_id to session" id="cohort{{loop.index}}">{{ cohort.name }}</a></li>
         {% endfor %}
     </ul>
 

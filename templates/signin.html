@@ -7,12 +7,13 @@
 <h1>Please sign in!</h1>
 
 <form action="/" method="POST">
-    <input type="radio" name="permissions" value="admin">Sign in as an admin<br>
-    <input type="radio" name="permissions" value="student">Sign in as a student<br>
-    <input type="text" name="name" placeholder="name"><br>
-    <input type="text" name="password" placeholder="password"><br>
-    <input type="submit">
+    <input type="radio" name="permissions" value="admin" id="admin-radio">Sign in as an admin<br>
+    <input type="radio" name="permissions" value="student" id="student-radio">Sign in as a student<br>
+    <input type="text" name="name" placeholder="name"  id="signin-name"><br>
+    <input type="text" name="password" placeholder="password" id="signin-password"><br>
+    <input type="submit" id="signin-submit">
 
 </form>
 
 {% endblock %}
+
