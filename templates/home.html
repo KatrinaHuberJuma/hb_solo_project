@@ -13,22 +13,25 @@
             <li><a href="{{ member.student_id }}-profile">{{ member.name }}</a></li>
         {% endfor %}
     </ul>
+    <h3>grad date is {{ grad_date }} KATRINA DON'T FORGET TO FIX THIS</h3>
 {% else %}
     <h2>Cohorts:</h2>
     <ul id="cohort-list">
         {% for cohort in cohorts %}
-            <li><a href="{{ cohort.cohort_id }}-TODO: add cohort_id to session" id="cohort{{loop.index}}">{{ cohort.name }}</a></li>
+            <li><a href="/{{ cohort.cohort_id }}/cohort" id="cohort{{loop.index}}">{{ cohort.name }}</a></li>
         {% endfor %}
     </ul>
+    {% if "admin_id" in session %}
+        <h3>Create new Cohort</h3>
 
-    <h3>Create new Cohort</h3>
-
-    <form id="create-cohort">
-        <input id="enter-cohort-name" type="text" name="new-cohort-name" placeholder="Cohort Name">
-        <input id="enter-cohort-password" type="password" name="new-cohort-password" placeholder="Cohort Password">
-        <input type="submit">
-    </form>
-
+        <form id="create-cohort">
+            <input id="enter-cohort-name" type="text" 
+                name="new-cohort-name" placeholder="Cohort Name">
+            <input id="enter-cohort-password" type="password" 
+                name="new-cohort-password" placeholder="Cohort Password">
+            <input type="submit">
+        </form>
+    {% endif %}
 
 {% endif %}
 

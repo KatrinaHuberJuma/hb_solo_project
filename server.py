@@ -17,8 +17,8 @@ def homepage():
 
     if "cohort_id" in session:
         cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
-
-        return render_template("home.html", cohort_members=cohort_members)
+        grad_date = Cohort.query.get(session["cohort_id"]).grad_date
+        return render_template("home.html", cohort_members=cohort_members, grad_date=grad_date)
 
     elif "admin_id" in session:
 
@@ -27,7 +27,9 @@ def homepage():
         return render_template("home.html", cohorts=cohorts)
 
     else:
-        return redirect("/signin") #TODO
+        cohorts = Cohort.query.all()
+
+        return render_template("home.html", cohorts=cohorts)
 
 @app.route("/", methods=["POST"])
 def homepage_post():
@@ -87,10 +89,13 @@ def signedout():
     if "student_id" in session:
         del session["student_id"]
         del session["cohort_id"]
+    elif "admin_id" in session:
+        del session["admin_id"]
+        del session["cohort_id"]
 
     flash("You have signed out")
 
-    return redirect("/signin")
+    return redirect("/")
 
 
 @app.route("/<student_id>-profile")
@@ -150,10 +155,17 @@ def add_cohort():
         response = {"string": "Not added"}
 
 
-
     return jsonify(response)
 
 
+
+@app.route("/<cohort_id>/cohort")
+def select_cohort(cohort_id):
+    """Add cohort_id to session"""
+
+    session["cohort_id"] = int(cohort_id)
+
+    return redirect("/")
 
 
 
@@ -172,7 +184,7 @@ if __name__ =="__main__":
     else:
         app.config['TESTING'] = False
 
-        
+
     database_uri = "postgresql:///kattestdb" if app.config['TESTING'] else "postgresql:///katfuntest"
     connect_to_db(app, database_uri) # fixme before deployment
     DebugToolbarExtension(app) # fixme before deployment

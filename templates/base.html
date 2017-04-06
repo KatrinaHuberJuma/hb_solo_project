@@ -4,11 +4,15 @@
 </head>
 <body>
     <nav>
-        {% if "user_id" in session %}
+        {% if "sudent_id" in session %}
             <a href="/signedout"><button>Log out</button></a>
+        {% elif "admin_id" in session %}
+            <a href="/signedout"><button>Log out</button></a>
+        {% else %}
+            <a href="/signin"><button>Log in</button></a>
         {% endif %}
         <a href="/labs"><button>Labs</button></a>
-        <a href="/"><button>Cohort Students</button></a>
+        <a href="/"><button>Cohort</button></a>
     </nav>
   {% for msg in get_flashed_messages() %}
     <div class="alert alert-info">{{ msg }}</div>
