@@ -190,15 +190,6 @@ class ModelServerIntegration(unittest.TestCase):
         db.session.close()
         db.drop_all()
 
-    # def test_admin_create_cohort(self):
-    #     """Tests that a singed in admin can create a cohort"""
-
-    #     create_admin()
-
-    #     result = self.client.post("/new-cohort",
-    #                                data={"cohort_name":"New Cohort",
-    #                                      "password":"pw"})
-    #     self.assertIn("Ellen Bellen", result.data)
 
     def test_display_cohorts_admin(self):
 
@@ -277,4 +268,5 @@ class ModelServerIntegration(unittest.TestCase):
 
 
 if __name__ == "__main__":
+
     unittest.main()
