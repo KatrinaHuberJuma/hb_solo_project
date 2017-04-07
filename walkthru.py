@@ -116,7 +116,7 @@ class AddyAdmin(unittest.TestCase):
         sleep(.5)
 
         self.assertEqual(self.browser.find_element_by_id("new-cohort")
-            .get_attribute("innerHTML"), '<a href="2">Joan</a>')
+            .get_attribute("innerHTML"), '<a href="/2/cohort">Joan</a>')
 
 
 

@@ -19,7 +19,7 @@ def homepage():
         cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
         grad_date = Cohort.query.get(session["cohort_id"]).grad_date
         return render_template("home.html", cohort_members=cohort_members, grad_date=grad_date)
-
+                                #cohort.html TODO
     elif "admin_id" in session:
 
         cohorts = Cohort.query.filter(Cohort.admin_id == session["admin_id"]).all()
@@ -91,7 +91,8 @@ def signedout():
         del session["cohort_id"]
     elif "admin_id" in session:
         del session["admin_id"]
-        del session["cohort_id"]
+        if "cohort_id" in session:
+            del session["cohort_id"]
 
     flash("You have signed out")
 
@@ -133,23 +134,25 @@ def add_cohort():
     """Allow admin to create a cohort"""
     print "this happened"
 
-    new_cohort_name = request.form.get("new-cohort-name")
-    new_cohort_password = request.form.get("new-cohort-password")
+    new_cohort_name = request.form.get("new_cohort_name")
+    new_cohort_password = request.form.get("new_cohort_password")
     admin_id = session["admin_id"]
 
     new_cohort = Cohort(name=new_cohort_name,
         password=new_cohort_password,
-        admin_id=admin_id)
+        admin_id=admin_id) 
+
 
     db.session.add(new_cohort)
     db.session.commit()
 
-    most_recent = db.session.query(Cohort).order_by(Cohort.cohort_id.desc()).first()
+    db.session.refresh(new_cohort)
 
-    if most_recent.name == new_cohort_name and most_recent.password == new_cohort_password:
+
+    if new_cohort.name == new_cohort_name and new_cohort.password == new_cohort_password:
         response = {
-                    "string": most_recent.name,
-                    "createdId": most_recent.cohort_id}
+                    "string": new_cohort.name,
+                    "createdId": new_cohort.cohort_id}
 
     else:
         response = {"string": "Not added"}
