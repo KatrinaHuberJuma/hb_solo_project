@@ -49,7 +49,7 @@ class Student(db.Model):
 
     def __repr__(self):
 
-        return "< %s is a student >" % (self.name)
+        return "< %s is a student %s >" % (self.name, self.student_id)
 
     student_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)

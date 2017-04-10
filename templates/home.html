@@ -6,33 +6,18 @@
 
 <h1>Welcome!</h1>
 
-{% if "cohort_id" in session %}
-    <h2>Cohort Members:</h2>
-    <ul>
-        {% for member in cohort_members %}
-            <li><a href="{{ member.student_id }}-profile">{{ member.name }}</a></li>
-        {% endfor %}
-    </ul>
-    <h3>grad date is {{ grad_date }} KATRINA DON'T FORGET TO FIX THIS</h3>
-{% else %}
+{% if "student_id" not in session %}
     <h2>Cohorts:</h2>
     <ul id="cohort-list">
         {% for cohort in cohorts %}
-            <li><a href="/{{ cohort.cohort_id }}/cohort" id="cohort{{loop.index}}">{{ cohort.name }}</a></li>
+            <li><a href="cohort{{ cohort.cohort_id }}" id="cohort{{loop.index}}">{{ cohort.name }}</a></li>
         {% endfor %}
     </ul>
-    {% if "admin_id" in session %}
-        <h3>Create new Cohort</h3>
-
-        <form id="create-cohort">
-            <input id="enter-cohort-name" type="text" 
-                name="new_cohort_name" placeholder="Cohort Name">
-            <input id="enter-cohort-password" type="password" 
-                name="new_cohort_password" placeholder="Cohort Password">
-            <input type="submit">
-        </form>
-    {% endif %}
-
 {% endif %}
+
+{% if "admin_id" in session %}
+    {% include 'admin_home.html' %}
+{% endif %}
+
 
 {% endblock %}

@@ -189,7 +189,7 @@ class ModelServerIntegration(unittest.TestCase):
 
         db.session.close()
         db.drop_all()
-
+ 
 
     def test_display_cohorts_admin(self):
 
@@ -218,10 +218,7 @@ class ModelServerIntegration(unittest.TestCase):
                 sess["student_id"] = 1
                 sess["cohort_id"] = 1
 
-        result = self.client.post("/",
-                                   data={"name":"Beth Happy",
-                                         "password":"pw",
-                                         "permissions": "student"})
+        result = self.client.get("/cohort1")
         self.assertIn("Ellen Bellen", result.data)
 
     def test_profile(self):

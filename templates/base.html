@@ -4,15 +4,26 @@
 </head>
 <body>
     <nav>
-        {% if "sudent_id" in session %}
+        {% if "student_id" in session %}
             <a href="/signedout"><button>Log out</button></a>
+
         {% elif "admin_id" in session %}
             <a href="/signedout"><button>Log out</button></a>
+
         {% else %}
             <a href="/signin"><button>Log in</button></a>
+
         {% endif %}
         <a href="/labs"><button>Labs</button></a>
-        <a href="/"><button>Cohort</button></a>
+
+        {% if "cohort_id" in session %}
+        <a href="/cohort{{ session['cohort_id'] }}"><button>Cohort</button></a>
+        {% endif %}
+
+        {% if "student_id" not in session %}
+            <a href="/clear_cohort"><button>All cohorts</button></a>
+        {% endif %}
+        
     </nav>
   {% for msg in get_flashed_messages() %}
     <div class="alert alert-info">{{ msg }}</div>
@@ -22,6 +33,7 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <script type="text/javascript" src="../static/admin.js"></script>
+<script type="text/javascript" src="../static/newStudent.js"></script>
 
 </body>
 </html>

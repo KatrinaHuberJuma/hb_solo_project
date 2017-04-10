@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %} Kat Cohort Home {% endblock %}
+
+{% block content %}
+
+<h2>Cohort Members:</h2>
+<ul id="student-list">
+    {% for member in cohort_members %}
+        <li><a href="/{{ member.student_id }}-profile">{{ member.name }}</a></li>
+    {% endfor %}
+</ul>
+<h3>grad date is {{ grad_date }} KATRINA DON'T FORGET TO FIX THIS</h3>
+
+{% if "admin_id" not in session %}
+    {% if "student_id" not in session %}
+        <h3>Join this Cohort!</h3>
+
+        <form id="join-cohort">
+            <input id="enter-student-name" type="text" 
+                name="new_student_name" placeholder="Your Full Name">
+            <input id="enter-student-email" type="text" 
+                name="new_student_email" placeholder="Your email">
+            <input id="enter-student-password" type="password" 
+                name="new_student_password" placeholder="Your Personal Password">
+            <input id="enter-this-cohort-password" type="password" 
+                name="cohort_password" placeholder="Cohort Secret Password">
+            <input type="submit">
+        </form>
+
+    {% endif %}
+{% endif %}
+
+
+
+{% endblock %}
