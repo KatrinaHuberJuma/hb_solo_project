@@ -8,7 +8,7 @@ from test_seed import create_admin, create_cohort, create_students, create_labs,
 #TESTS FOR THE SERVER ALONE
 ######################################################
 
-class ServerUnitTests(unittest.TestCase):
+class ServerTests(unittest.TestCase):
     """ tests routes """
 
     def setUp(self):
@@ -26,7 +26,7 @@ class ServerUnitTests(unittest.TestCase):
 #TESTS FOR THE DATABASE ALONE
 ######################################################
 
-class RelationshipUnitTests(unittest.TestCase):
+class RelationshipTests(unittest.TestCase):
     """Tests that the classes in model correctly polulate a database"""
 
     def setUp(self):

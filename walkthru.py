@@ -52,10 +52,8 @@ class UserSignin(unittest.TestCase):
         self.browser.find_element_by_id("admin-radio").click()
         name = self.browser.find_element_by_id("signin-name")
         name.send_keys("Addy Gladdy")
-        sleep(1)
         password = self.browser.find_element_by_id("signin-password")
         password.send_keys("pw")
-        sleep(1)        
         password.submit()
         self.assertEqual(self.browser.find_element_by_id("cohort1")
             .get_attribute("innerHTML"), "Boudicca")
@@ -69,12 +67,10 @@ class UserSignin(unittest.TestCase):
         self.browser.find_element_by_id("student-radio").click()
         name = self.browser.find_element_by_id("signin-name")
         name.send_keys("Beth Happy")
-        sleep(1)
         password = self.browser.find_element_by_id("signin-password")
-        password.send_keys("pw")
-        sleep(1)        
+        password.send_keys("pw")     
         password.submit()
-        sleep(3)   
+        sleep(1)   
         self.browser.get('http://localhost:5000/1-profile') # TODO do I still need this if I remove from server.py DebudToolbarExtention(app)? 
         self.assertEqual(self.browser.find_element_by_id("greet-signedin-student")
             .get_attribute("innerHTML"), "Hey Beth Happy! Welcome to your own profile!")
@@ -129,19 +125,36 @@ class AddyAdmin(unittest.TestCase):
 
 
         self.browser.get('http://localhost:5000/')
-        sleep(1)
         new_name = self.browser.find_element_by_id("enter-cohort-name")
         new_name.send_keys("Joan")
-        sleep(1)    
         new_password = self.browser.find_element_by_id("enter-cohort-password")
         new_password.send_keys("pw")
 
         new_password.submit()
 
-        sleep(.5)
+        sleep(1)
 
         self.assertEqual(self.browser.find_element_by_id("new-cohort")
             .get_attribute("innerHTML"), '<a href="/2/cohort">Joan</a>')
+
+
+
+    def test_admin_create_lab(self):
+        """Addy creates a new lab called "Selenium Testing" with a short description"""
+
+
+        self.browser.get('http://localhost:5000/cohort1')
+        new_lab_name = self.browser.find_element_by_id("enter-lab-name")
+        new_lab_name.send_keys("Selenium Testing")
+        new_descript = self.browser.find_element_by_id("enter-lab-description")
+        new_descript.send_keys("Learn to use Selenium as a 'player piano' for your app")
+
+        new_descript.submit()
+
+        sleep(1)
+
+        self.assertEqual(self.browser.find_element_by_id("new-lab")
+            .get_attribute("innerHTML"), '<a href="/lab/1">Selenium Testing</a>')
 
 
 

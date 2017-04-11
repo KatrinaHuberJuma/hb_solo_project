@@ -24,3 +24,30 @@ function submitNewCohortInfo(evt) {
 }
 
 $('#create-cohort').on('submit', submitNewCohortInfo)
+
+////////////////////////////////////////////////////////////////////////////////
+
+function showNewLab(results) {
+    // display 
+
+    var resultString = results.string
+    var resultId = results.createdId
+
+    $("#lab-list").append("<li id='new-lab'><a href='/lab/" + resultId + "'>" + resultString + "</a></li>")
+
+    $("#enter-lab-name").val("")
+    $("#enter-lab-description").val("")
+}
+
+function submitNewLabInfo(evt) {
+    // post form data to the add-cohort route
+
+    var formInput = {
+        "new_lab_name": $("#enter-lab-name").val(),
+        "new_lab_description": $("#enter-lab-description").val()
+    }
+    evt.preventDefault();
+    $.post("add-lab", formInput, showNewLab);
+}
+
+$('#create-lab').on('submit', submitNewLabInfo)
