@@ -2,7 +2,7 @@
 
 # from connect_to_db import connect_to_db, db
 from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
-
+from datetime import datetime
 from flask import Flask, session, render_template, request, jsonify, flash, redirect, g
 from flask_debugtoolbar import DebugToolbarExtension
 import os, sys
@@ -28,7 +28,6 @@ def homepage():
     """Show homepage"""
 
     if "student_id" in session:
-        print "\n\n\n", session["student_id"]
         return redirect("/%s-profile" % session["student_id"])
 
     elif "admin_id" in session:
@@ -145,7 +144,8 @@ def display_profile(student_id):
 def labs():
     """display the lab history"""
 
-    labs = Lab.query.all() # TODO specify cohort
+    # labs = Lab.query.all() # TODO specify cohort
+    labs = db.session.query(Lab).order_by(Lab.date).join(Cohort).all()
 
     return render_template("labs.html", labs=labs)
 
@@ -215,11 +215,13 @@ def add_lab():
 
     new_lab_name = request.form.get("new_lab_name")
     new_lab_description = request.form.get("new_lab_description")
+    new_lab_date = request.form.get("new_lab_date")
     admin_id = session["admin_id"]
 
     new_lab = Lab(title=new_lab_name,
         description=new_lab_description,
-        cohort_id=session["cohort_id"]) 
+        cohort_id=session["cohort_id"],
+        date=datetime.strptime(new_lab_date,"%Y-%m-%d")) 
 
 
     db.session.add(new_lab)
@@ -268,8 +270,6 @@ def signup_student():
 
         db.session.add(new_student)
         db.session.commit()
-
-        print new_student
 
         response = {
                     "string": new_student.name,

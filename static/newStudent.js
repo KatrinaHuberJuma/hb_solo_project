@@ -8,6 +8,11 @@ function showNewStudent(results) {
 
     $("#student-list").append("<li><a id='new-student' href='/" + resultId + "-profile'>" + resultString + "</a></li>")
 
+    $("#enter-student-name").val("")
+    $("#enter-student-password").val("")
+    $("#enter-student-email").val("")
+    $("#enter-this-cohort-password").val("")
+
 }
 
 function submitNewStudentInfo(evt) {

@@ -1,5 +1,3 @@
-
-from connect_to_db import connect_to_db, db
 # from server import app
 
 from flask_sqlalchemy import SQLAlchemy
@@ -170,5 +168,3 @@ if __name__ == "__main__":
 
     #############################
 #     Lab.query.filter(Lab.lab_id==1).join(LabKeyword).join(Keyword).first()
-
-# db.session.query(Lab).join(Lab.lab_id==LabKeyword.lab_id).join(LabKeyword.keyword_id==Keyword).keywords.all()

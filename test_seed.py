@@ -1,6 +1,6 @@
 
 from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
-
+from datetime import datetime
 from server import app
 
 ######################################################
@@ -31,7 +31,10 @@ def create_cohort():
 
     admin_id = Admin.query.first().admin_id
 
-    bo = Cohort(name="Boudicca", password="secretpw", admin_id=admin_id)
+    bo = Cohort(name="Boudicca",
+        password="secretpw",
+        admin_id=admin_id,
+        grad_date=datetime.strptime("04/11/2017", "%m/%d/%Y"))
     db.session.add(bo)
     db.session.commit()
 
@@ -75,13 +78,15 @@ def create_labs():
 
     mel = Lab(title="Balloonicorn Melon Festival",
         description="Balloonicorn's festival of melons",
-        cohort_id=bo_id
+        cohort_id=bo_id,
+        date=datetime.strptime("03/11/2017", "%m/%d/%Y")
         )
     db.session.add(mel)
 
     yay = Lab(title="Yay",
         description="Labs are great",
-        cohort_id=bo_id
+        cohort_id=bo_id,
+        date=datetime.strptime("03/5/2017", "%m/%d/%Y")
         )
     db.session.add(yay)
 

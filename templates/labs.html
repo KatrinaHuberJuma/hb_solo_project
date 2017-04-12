@@ -10,11 +10,12 @@
     {% for lab in labs %}
         <li><h3><a href="{{url_for('lab_details', lab_id = lab.lab_id)}}">{{ lab.title }}</a></h3>
             <p>{{ lab.description }}</p>
+            <p>({{ lab.cohort.name }} cohort, {{ lab.date.strftime('%m/%d/%Y') }})</p>
         </li>
     {% endfor %}
 </ul>
 
-<p>ATTENTION KATRINA! don't forget: each lab should be related to a cohort. make that relationship and necessary adjustments. This page should display the labs for a given cohort!!!!!!!!!!!!!!!</p>
-<p>ALSO: labs should have the date</p>
+<p>ATTENTION KATRINA!!!!!!!!!!!!!!!!</p>
+<p>TODO: labs should have the date</p>
 
 {% endblock %}

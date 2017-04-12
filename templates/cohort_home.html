@@ -29,7 +29,7 @@
 
 </div>
 
-<h3>grad date is {{ cohort.grad_date }} KATRINA DON'T FORGET TO FIX THIS</h3>
+<h3>grad date is {{ cohort.grad_date.strftime('%m/%d/%Y') }}</h3>
 
 
 {% if "admin_id" not in session %}
@@ -56,8 +56,9 @@
     <form id="create-lab">
         <input id="enter-lab-name" type="text" 
             name="new_lab_name" placeholder="Lab Name">
-            <input id="enter-lab-description" type="text" 
+        <input id="enter-lab-description" type="text" 
             name="new_lab_description" placeholder="Lab Description">
+        <input id="enter-lab-date" type="date" name="new_lab_date">     
         <input type="submit">
     </form>
 

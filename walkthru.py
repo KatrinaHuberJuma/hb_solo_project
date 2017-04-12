@@ -38,14 +38,14 @@ class UserSignin(unittest.TestCase):
 
     def test_view_signin_page(self):
 
-        """Addy views the signin page"""
+        """anonymous user views the signin page"""
 
         self.browser.get('http://localhost:5000/signin')
         self.assertEqual(self.browser.title, "Kat Signin")
 
 
     def test_admin_signin(self):
-        """Addy Gladdy enters her name and password and hits submit button"""
+        """Addy Gladdy selects 'sign in as admin', enters her name and password and hits submit button"""
 
         self.browser.get('http://localhost:5000/signin')
 
@@ -60,7 +60,7 @@ class UserSignin(unittest.TestCase):
 
 
     def test_student_signin(self):
-        """Beth Happy enters her name and password and hits submit button"""
+        """Beth Happy selects 'sign in as student', enters her name and password and hits submit button"""
 
         self.browser.get('http://localhost:5000/signin')
 
@@ -135,7 +135,7 @@ class AddyAdmin(unittest.TestCase):
         sleep(1)
 
         self.assertEqual(self.browser.find_element_by_id("new-cohort")
-            .get_attribute("innerHTML"), '<a href="/2/cohort">Joan</a>')
+            .get_attribute("innerHTML"), '<a href="/cohort2">Joan</a>')
 
 
 
