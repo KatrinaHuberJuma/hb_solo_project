@@ -3,7 +3,7 @@ from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword,
 import unittest
 from server import app, session
 from test_seed import create_admin, create_cohort, create_students, create_labs, create_pair, create_keywords, associate_labs_to_keywords
-
+from helpers import create_lab_pair
 ######################################################
 #TESTS FOR THE SERVER ALONE
 ######################################################
@@ -163,6 +163,40 @@ class RelationshipTests(unittest.TestCase):
             .filter(LabKeyword.keyword_id==Keyword.keyword_id)
             .first().keyword.keyword
             )
+
+
+    def test_create_lab_pair(self):
+
+        create_admin()
+        create_cohort()
+        students = create_students()
+        labs = create_labs()
+        lab_id = labs[1].lab_id
+
+        create_lab_pair(db=db, student_1_id=students[0].student_id,
+            student_2_id=students[1].student_id, lab_id=lab_id)
+
+        self.assertEqual('Beth Happy', db.session
+            .query(Pair)
+            .first() 
+            .student1.name
+            )
+        self.assertEqual('Ellen Bellen', db.session
+            .query(Pair)
+            .first() 
+            .student2.name
+            )
+        self.assertEqual('Yay', db.session
+            .query(Pair)
+            .first()
+            .lab.title
+            )
+        self.assertEqual('This is a test', db.session
+            .query(Pair)
+            .first()
+            .notes
+            )
+            
 
 
 

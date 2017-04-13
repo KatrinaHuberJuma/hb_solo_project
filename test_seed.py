@@ -67,6 +67,8 @@ def create_students():
     db.session.add(ellen)
     db.session.commit()
 
+    return [beth, ellen]
+
 
 def create_labs():
     """Adds a lab to the database
@@ -91,6 +93,8 @@ def create_labs():
     db.session.add(yay)
 
     db.session.commit()
+
+    return [mel, yay]
 
 
 def create_pair():
