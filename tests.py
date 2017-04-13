@@ -3,7 +3,7 @@ from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword,
 import unittest
 from server import app, session
 from test_seed import create_admin, create_cohort, create_students, create_labs, create_pair, create_keywords, associate_labs_to_keywords
-from helpers import create_lab_pair
+from helpers import create_lab_pair, create_lab_keyword_association, create_multiple_keywords
 ######################################################
 #TESTS FOR THE SERVER ALONE
 ######################################################
@@ -144,18 +144,24 @@ class RelationshipTests(unittest.TestCase):
     def test_keyword_created(self):
         """Tests that the keywords table exists and has an added keyword"""
 
-        create_keywords()
+        create_multiple_keywords(db=db, keywords=["Elephant", "puppy"])
 
-        self.assertEqual("word", Keyword.query.first().keyword)
+        existing_keywords = Keyword.query.all()
+
+        self.assertEqual("elephant", existing_keywords[0].keyword)
+        self.assertEqual("puppy", existing_keywords[1].keyword)
 
     def test_lab_keyword_association(self):
         """Tests that a lab and a keyword can be associated through the labs_keywords table"""
 
         create_admin()
         create_cohort()
-        create_labs()
-        create_keywords()
-        associate_labs_to_keywords()
+        labs = create_labs()
+        keywords = create_keywords()
+        
+        create_lab_keyword_association(db=db,
+            lab_id=labs[0].lab_id,
+            keyword_id=keywords[0].keyword_id)
 
         self.assertEqual('word', db.session
             .query(LabKeyword)

@@ -124,6 +124,8 @@ def create_keywords():
     db.session.add(kw)
     db.session.add(kw2)
     db.session.commit()
+    
+    return [kw, kw2]
 
 def associate_labs_to_keywords():
     """Associates labs and keywords
