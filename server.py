@@ -6,6 +6,8 @@ from datetime import datetime
 from flask import Flask, session, render_template, request, jsonify, flash, redirect, g
 from flask_debugtoolbar import DebugToolbarExtension
 import os, sys
+from helpers import create_lab_pair, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids
+
 
 app = Flask(__name__)
 app.secret_key = os.environ['secret_key']
@@ -287,6 +289,30 @@ def signup_student():
     return jsonify(response)
 
 
+################################################################################
+
+@app.route("/add_keyword", methods=["POST"])
+def add_keywords_to_lab():
+
+    new_keywords = request.form.get("new_keywords")
+    lab_id_for_keyword = request.form.get("lab_id_for_keyword")
+
+    new_keywords = new_keywords.split(", ")
+
+    kw_ids = return_keywords_ids(db=db, keywords=new_keywords)
+
+    create_association_keywords_to_lab(db=db, lab_id=lab_id_for_keyword, keywords_ids=kw_ids)
+
+    response = {
+                "new_words": new_keywords
+                }
+
+    return jsonify(new_keywords)
+
+
+
+    
+
 
 ################################################################################
 
@@ -303,10 +329,6 @@ def cohort_home(cohort_id):
         cohort=cohort,
         cohort_labs=cohort_labs)
 
-
-
-
-################################################################################
 
 
 

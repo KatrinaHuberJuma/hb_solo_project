@@ -20,11 +20,27 @@
 
 
 <h4>Keywords:</h4>
-<ul>
+<ul id="related-keywords">
     {% for keyword in keywords %}
     <li><h5>{{ keyword.keyword }} </h5></li>
     {% endfor %}
 </ul>
+
+{% if "student_id" in session or "admin_id" in session %}
+
+    <h3>Add Keyword to this Lab</h3>
+
+    <form id="add-keyword">
+        <input id="enter-new-keywords" type="text" 
+                name="new_keywords" placeholder="comma separated keywords">
+        <input id="enter-lab-id" type="hidden" name="lab_id_for_keyword" value="{{ lab.lab_id }}" >
+        <input type="submit">
+    </form>
+
+{% endif %}
+
+
+
 
 
 {% endblock %}

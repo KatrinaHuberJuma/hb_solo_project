@@ -3,7 +3,7 @@ from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword,
 import unittest
 from server import app, session
 from test_seed import create_admin, create_cohort, create_students, create_labs, create_pair, create_keywords, associate_labs_to_keywords
-from helpers import create_lab_pair, create_lab_keyword_association, create_multiple_keywords
+from helpers import create_lab_pair, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids
 ######################################################
 #TESTS FOR THE SERVER ALONE
 ######################################################
@@ -141,7 +141,7 @@ class RelationshipTests(unittest.TestCase):
             .student1.name
             )
 
-    def test_keyword_created(self):
+    def test_keywords_created(self):
         """Tests that the keywords table exists and has an added keyword"""
 
         create_multiple_keywords(db=db, keywords=["Elephant", "puppy"])
@@ -151,7 +151,30 @@ class RelationshipTests(unittest.TestCase):
         self.assertEqual("elephant", existing_keywords[0].keyword)
         self.assertEqual("puppy", existing_keywords[1].keyword)
 
-    def test_lab_keyword_association(self):
+
+
+    def test_return_certain_keywords_ids(self):
+
+        create_multiple_keywords(db=db, keywords=["Elephant", "puppy", "skipme", "cool"])
+
+        certain_ids = return_certain_keywords_ids(db=db, keywords=["elephant", "cool", "puppy"])
+
+        self.assertEqual([1, 2, 4], certain_ids)        
+
+
+
+    def test_return_keywords_ids(self):
+
+        create_multiple_keywords(db=db, keywords=["Elephant", "puppy", "skipme", "cool"])
+
+
+        these_kw_ids = return_keywords_ids(db=db, keywords=["elephant", "cool", "puppy", "bestie"])
+
+        self.assertEqual([1, 2, 4, 5], these_kw_ids) 
+
+
+
+    def test_lab_keywords_association(self):
         """Tests that a lab and a keyword can be associated through the labs_keywords table"""
 
         create_admin()
@@ -159,16 +182,42 @@ class RelationshipTests(unittest.TestCase):
         labs = create_labs()
         keywords = create_keywords()
         
-        create_lab_keyword_association(db=db,
+        create_association_keywords_to_lab(db=db,
             lab_id=labs[0].lab_id,
-            keyword_id=keywords[0].keyword_id)
+            keywords_ids=[keyword.keyword_id for keyword in keywords])
 
         self.assertEqual('word', db.session
             .query(LabKeyword)
             .filter(Lab.lab_id==LabKeyword.lab_id)
             .filter(LabKeyword.keyword_id==Keyword.keyword_id)
-            .first().keyword.keyword
+            .all()[0].keyword.keyword
             )
+
+        self.assertEqual('key', db.session
+            .query(LabKeyword)
+            .filter(Lab.lab_id==LabKeyword.lab_id)
+            .filter(LabKeyword.keyword_id==Keyword.keyword_id)
+            .all()[1].keyword.keyword
+            )
+
+
+    def test_no_duplicate_lab_keyword_association(self):
+    
+        create_admin()
+        create_cohort()
+        labs = create_labs()
+        keywords = create_keywords()
+
+        create_association_keywords_to_lab(db=db,
+            lab_id=labs[0].lab_id,
+            keywords_ids=[keyword.keyword_id for keyword in keywords]) 
+                   
+        create_association_keywords_to_lab(db=db,
+            lab_id=labs[0].lab_id,
+            keywords_ids=[keyword.keyword_id for keyword in keywords])
+
+        self.assertEqual(LabKeyword.query.filter(LabKeyword.row_id == 3).first(), None)
+        self.assertEqual(LabKeyword.query.filter(LabKeyword.row_id == 4).first(), None)
 
 
     def test_create_lab_pair(self):
