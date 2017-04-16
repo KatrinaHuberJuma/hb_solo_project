@@ -2,27 +2,25 @@
 from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
 from datetime import datetime
 from server import app
+from helpers import create_admin, create_cohort
 
 ######################################################
 #TEST DATA SEED
 ######################################################
 
 
-def create_admin():
+def create_addy_admin():
     """creates an admin in the admins table"""
 
-    ad = Admin(name="Addy Gladdy", 
+    ad = create_admin(db=db, name="Addy Gladdy", 
         github_link="greatness.git",
         email="awesome.awe",
         profile_pic="so pretty picture",
         password="pw")
 
-    db.session.add(ad)
-    db.session.commit()
 
 
-
-def create_cohort():
+def create_boudicca_cohort():
     """Adds a cohort to the database
 
     Call creat_admin() before calling this function
@@ -31,18 +29,19 @@ def create_cohort():
 
     admin_id = Admin.query.first().admin_id
 
-    bo = Cohort(name="Boudicca",
+    bo = create_cohort(db=db, name="Boudicca",
         password="secretpw",
         admin_id=admin_id,
-        grad_date=datetime.strptime("04/11/2017", "%m/%d/%Y"))
-    db.session.add(bo)
-    db.session.commit()
+        grad_date="2017-04-05")
 
+    return bo
+
+  
 
 def create_students():
     """Adds two students (of one cohort) to the database
 
-    Call create_admin(), create_cohort() before calling this function
+    Call create_admin(), create_boudicca_cohort() before calling this function
 
     """
 
@@ -73,7 +72,7 @@ def create_students():
 def create_labs():
     """Adds a lab to the database
 
-    Call create_admin(), create_cohort() before calling this function"""
+    Call create_admin(), create_boudicca_cohort() before calling this function"""
 
     bo_from_db = Cohort.query.first()
     bo_id = bo_from_db.cohort_id
@@ -100,7 +99,7 @@ def create_labs():
 def create_pair():
     """Creates a relationship between two students and a lab
 
-    Call create_admin(), create_cohort(), create_students() 
+    Call create_admin(), create_boudicca_cohort(), create_students() 
     and create_labs() before calling this function
     """
 
@@ -130,7 +129,7 @@ def create_keywords():
 def associate_labs_to_keywords():
     """Associates labs and keywords
 
-    Call create_admin(), create_cohort(), create_labs()
+    Call create_admin(), create_boudicca_cohort(), create_labs()
     and create_keywords() before calling this function
     """
 
@@ -161,8 +160,8 @@ if __name__ == "__main__":
         connect_to_db(app, "postgresql:///katfuntest")
         db.create_all()
         
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
         create_labs()
         create_pair()

@@ -6,7 +6,7 @@ from datetime import datetime
 from flask import Flask, session, render_template, request, jsonify, flash, redirect, g
 from flask_debugtoolbar import DebugToolbarExtension
 import os, sys
-from helpers import create_lab_pair, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids
+from helpers import create_lab_pair, create_association_keywords_to_lab, return_labs_by_keyword_id, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, create_cohort, return_all_keywords
 
 
 app = Flask(__name__)
@@ -167,10 +167,37 @@ def lab_details(lab_id):
     else:
         pairs = Pair.query.filter(Pair.lab_id == lab_id).all()
 
-    keywords = [ x.keyword for x in lab.labs_keywords]
+    keywords = [x.keyword for x in lab.labs_keywords]
 
     return render_template("lab_page.html", lab=lab, keywords=keywords, pairs=pairs)
 
+
+
+################################################################################
+
+@app.route("/keywords")
+def keywords():
+    """Display all keywords, select one to view related labs"""
+
+    keywords = return_all_keywords(db)
+
+    return render_template("keywords.html", keywords=keywords)
+
+
+
+################################################################################
+
+@app.route("/show_related_labs", methods=["POST"])
+def related_labs():
+    """display all labs related to a given keyword_id"""
+
+    keyword_id = request.form.get("keyword_id")
+
+    labs = return_labs_by_keyword_id(db, keyword_id=keyword_id)
+
+    labs = [{"lab_title": lab.title, "lab_id": lab.lab_id, "keyword_id": keyword_id} for lab in labs]
+
+    return jsonify(labs)
 
 
 ################################################################################
@@ -181,12 +208,14 @@ def add_cohort():
 
     new_cohort_name = request.form.get("new_cohort_name")
     new_cohort_password = request.form.get("new_cohort_password")
+    new_grad_date = request.form.get("new_grad_date")
     admin_id = session["admin_id"]
 
-    new_cohort = Cohort(name=new_cohort_name,
+    new_cohort = create_cohort(db=db,
+        name=new_cohort_name,
         password=new_cohort_password,
-        admin_id=admin_id) 
-
+        grad_date=new_grad_date,
+        admin_id=admin_id)
 
     db.session.add(new_cohort)
     db.session.commit()

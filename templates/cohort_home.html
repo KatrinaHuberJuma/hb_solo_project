@@ -6,8 +6,6 @@
 
 
 
-
-
 <div class="row">
     <div class="col-md-6">
         <h2>{{ cohort.name}} Members:</h2>
@@ -34,6 +32,7 @@
 
 {% if "admin_id" not in session %}
     {% if "student_id" not in session %}
+    <div id="join-cohort-form">
         <h3>Join this Cohort!</h3>
 
         <form id="join-cohort">
@@ -47,7 +46,7 @@
                 name="cohort_password" placeholder="Cohort Secret Password">
             <input type="submit">
         </form>
-
+    </div>
     {% endif %}
 {% else %}
 

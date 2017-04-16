@@ -2,8 +2,8 @@
 from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
 import unittest
 from server import app, session
-from test_seed import create_admin, create_cohort, create_students, create_labs, create_pair, create_keywords, associate_labs_to_keywords
-from helpers import create_lab_pair, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids
+from test_seed import create_addy_admin, create_boudicca_cohort, create_students, create_labs, create_pair, create_keywords, associate_labs_to_keywords
+from helpers import create_lab_pair, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, return_labs_by_keyword_id
 ######################################################
 #TESTS FOR THE SERVER ALONE
 ######################################################
@@ -44,7 +44,7 @@ class RelationshipTests(unittest.TestCase):
     def test_admin_row(self):
         """checks that 'Addy Gladdy' was correctly added to the database"""
 
-        create_admin()
+        create_addy_admin()
 
         self.assertEqual('greatness.git', Admin.query
             .filter(Admin.name == 'Addy Gladdy')
@@ -55,8 +55,8 @@ class RelationshipTests(unittest.TestCase):
     def test_cohort_row(self):
         """checks that the test cohort is in the cohorts table"""
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
 
         self.assertEqual('Boudicca', Cohort.query
             .filter(Cohort.name == 'Boudicca')
@@ -68,8 +68,8 @@ class RelationshipTests(unittest.TestCase):
     def test_student_row(self):
         """ checks that 'Beth Happy' was correctly added to database """
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
 
         self.assertEqual('Beth Happy', Student.query
@@ -82,8 +82,8 @@ class RelationshipTests(unittest.TestCase):
     def test_student_to_cohort_relation(self):
         """Checks that the relationship between students and cohorts is correct"""
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
 
         self.assertEqual('Boudicca', db.session
@@ -98,8 +98,8 @@ class RelationshipTests(unittest.TestCase):
     def test_lab_row(self):
         """ tests that a row was added to the labs table """
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_labs()
 
         self.assertEqual('Balloonicorn Melon Festival', Lab.query
@@ -112,8 +112,8 @@ class RelationshipTests(unittest.TestCase):
     def test_pair_relationship_to_lab(self):
         """ tests that there is a relationship between cohort and pair """
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
         create_labs()
         create_pair()
@@ -129,8 +129,8 @@ class RelationshipTests(unittest.TestCase):
     def test_pair_relationship_to_student(self):
         """ tests that there is a relationship between cohort and pair """
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
         create_labs()
         create_pair()
@@ -141,6 +141,7 @@ class RelationshipTests(unittest.TestCase):
             .student1.name
             )
 
+
     def test_keywords_created(self):
         """Tests that the keywords table exists and has an added keyword"""
 
@@ -148,7 +149,7 @@ class RelationshipTests(unittest.TestCase):
 
         existing_keywords = Keyword.query.all()
 
-        self.assertEqual("elephant", existing_keywords[0].keyword)
+        self.assertEqual("Elephant", existing_keywords[0].keyword)
         self.assertEqual("puppy", existing_keywords[1].keyword)
 
 
@@ -157,7 +158,7 @@ class RelationshipTests(unittest.TestCase):
 
         create_multiple_keywords(db=db, keywords=["Elephant", "puppy", "skipme", "cool"])
 
-        certain_ids = return_certain_keywords_ids(db=db, keywords=["elephant", "cool", "puppy"])
+        certain_ids = return_certain_keywords_ids(db=db, keywords=["Elephant", "cool", "puppy"])
 
         self.assertEqual([1, 2, 4], certain_ids)        
 
@@ -168,7 +169,7 @@ class RelationshipTests(unittest.TestCase):
         create_multiple_keywords(db=db, keywords=["Elephant", "puppy", "skipme", "cool"])
 
 
-        these_kw_ids = return_keywords_ids(db=db, keywords=["elephant", "cool", "puppy", "bestie"])
+        these_kw_ids = return_keywords_ids(db=db, keywords=["Elephant", "cool", "puppy", "bestie"])
 
         self.assertEqual([1, 2, 4, 5], these_kw_ids) 
 
@@ -177,8 +178,8 @@ class RelationshipTests(unittest.TestCase):
     def test_lab_keywords_association(self):
         """Tests that a lab and a keyword can be associated through the labs_keywords table"""
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         labs = create_labs()
         keywords = create_keywords()
         
@@ -203,8 +204,8 @@ class RelationshipTests(unittest.TestCase):
 
     def test_no_duplicate_lab_keyword_association(self):
     
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         labs = create_labs()
         keywords = create_keywords()
 
@@ -220,10 +221,36 @@ class RelationshipTests(unittest.TestCase):
         self.assertEqual(LabKeyword.query.filter(LabKeyword.row_id == 4).first(), None)
 
 
+    def test_return_labs_by_keyword_id(self):
+        
+        create_addy_admin()
+        create_boudicca_cohort()
+        labs = create_labs()    
+        mel_fest_keywords = ["outside", "melon", "fun", "goodness"]
+        yay_keywords = ["excite", "yes", "goodness"]
+        # other_cohort_keywords = ["no", "not", "bad"]
+        mel_fest_keywords_ids = return_keywords_ids(db, mel_fest_keywords)
+        yay_keywords_ids = return_keywords_ids(db, yay_keywords)
+        create_association_keywords_to_lab(db, labs[0].lab_id, mel_fest_keywords_ids)
+        create_association_keywords_to_lab(db, labs[1].lab_id, yay_keywords_ids)
+
+
+        keywords_ids = return_keywords_ids(db, ["outside", "goodness", "excite"])
+
+
+        self.assertEqual("Balloonicorn Melon Festival",
+            return_labs_by_keyword_id(db, keywords_ids[0])[0].title)
+        self.assertEqual(["Balloonicorn Melon Festival", "Yay"],
+            [lab.title for lab in return_labs_by_keyword_id(db, keywords_ids[1])])
+        self.assertEqual("Yay",
+            return_labs_by_keyword_id(db, keywords_ids[2])[0].title)
+
+
+
     def test_create_lab_pair(self):
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         students = create_students()
         labs = create_labs()
         lab_id = labs[1].lab_id
@@ -282,8 +309,8 @@ class ModelServerIntegration(unittest.TestCase):
 
     def test_display_cohorts_admin(self):
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
 
         with self.client as c:
             with c.session_transaction() as sess:
@@ -298,8 +325,8 @@ class ModelServerIntegration(unittest.TestCase):
 
     def test_display_cohort_members_to_student(self):
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
 
         with self.client as c:
@@ -312,8 +339,8 @@ class ModelServerIntegration(unittest.TestCase):
 
     def test_profile(self):
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
 
         result = self.client.get("/2-profile")
@@ -322,8 +349,8 @@ class ModelServerIntegration(unittest.TestCase):
 
     def test_labs_route(self):
         
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_labs()
 
         result = self.client.get("/labs")
@@ -331,8 +358,8 @@ class ModelServerIntegration(unittest.TestCase):
 
     def test_lab_details(self):
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
         create_labs()
         create_pair()

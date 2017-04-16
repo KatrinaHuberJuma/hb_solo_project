@@ -1,10 +1,10 @@
 import unittest
+import server
 from time import sleep
 from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
 from server import app
-import server
 from selenium import webdriver
-from test_seed import create_admin, create_cohort, create_students
+from test_seed import create_addy_admin, create_boudicca_cohort, create_students
 
 
 class UserSignin(unittest.TestCase):
@@ -18,8 +18,8 @@ class UserSignin(unittest.TestCase):
         connect_to_db(app, "postgresql:///kattestdb")
         db.create_all()
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
 
         cls.browser = webdriver.Chrome()
@@ -92,8 +92,8 @@ class AddyAdmin(unittest.TestCase):
         connect_to_db(app, "postgresql:///kattestdb")
         db.create_all()
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
 
         cls.browser = webdriver.Chrome()
 
@@ -120,7 +120,7 @@ class AddyAdmin(unittest.TestCase):
 
 
 
-    def test_admin_create_cohort(self):
+    def test_admin_create_boudicca_cohort(self):
         """Addy creates a new cohort called "Joan" with the password "pw"""
 
 
@@ -172,8 +172,8 @@ class NewStudent(unittest.TestCase):
         connect_to_db(app, "postgresql:///kattestdb")
         db.create_all()
 
-        create_admin()
-        create_cohort()
+        create_addy_admin()
+        create_boudicca_cohort()
         create_students()
 
         cls.browser = webdriver.Chrome()

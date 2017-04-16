@@ -10,14 +10,22 @@ function showNewCohort(results) {
 
     $("#enter-cohort-name").val("")
     $("#enter-cohort-password").val("")
+    $("#enter-grad-password").val("")
 }
 
 function submitNewCohortInfo(evt) {
     // post form data to the add-cohort route
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+4; //January is 0!
+    var yyyy = today.getFullYear();
+
+    var gradDate = $("#enter-grad-date").val() || yyyy + "-" + mm + "-" + dd
 
     var formInput = {
         "new_cohort_name": $("#enter-cohort-name").val(),
-        "new_cohort_password": $("#enter-cohort-password").val()
+        "new_cohort_password": $("#enter-cohort-password").val(),
+        "new_grad_date": gradDate
     }
     evt.preventDefault();
     $.post("/add-cohort", formInput, showNewCohort);
