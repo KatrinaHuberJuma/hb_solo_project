@@ -171,7 +171,7 @@ class RelationshipTests(unittest.TestCase):
 
         these_kw_ids = return_keywords_ids(db=db, keywords=["Elephant", "cool", "puppy", "bestie"])
 
-        self.assertEqual([1, 2, 4, 5], these_kw_ids) 
+        self.assertEqual(set([1, 2, 4, 5]), set(these_kw_ids)) 
 
 
 
@@ -238,11 +238,11 @@ class RelationshipTests(unittest.TestCase):
         keywords_ids = return_keywords_ids(db, ["outside", "goodness", "excite"])
 
 
-        self.assertEqual("Balloonicorn Melon Festival",
+        self.assertEqual("Yay",
             return_labs_by_keyword_id(db, keywords_ids[0])[0].title)
         self.assertEqual(["Balloonicorn Melon Festival", "Yay"],
             [lab.title for lab in return_labs_by_keyword_id(db, keywords_ids[1])])
-        self.assertEqual("Yay",
+        self.assertEqual("Balloonicorn Melon Festival",
             return_labs_by_keyword_id(db, keywords_ids[2])[0].title)
 
 
