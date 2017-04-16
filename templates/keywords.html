@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} Kat Project Keywords {% endblock %}
+
+{% block content %}
+
+<h1>All Keywords</h1>
+
+<ul id="keyword-list">
+    {% for keyword in keywords %}
+        <li> <button id="keyword{{ keyword.keyword_id }}" value="{{ keyword.keyword_id }}">{{ keyword.keyword }}</button>
+            <ul id="labs-of-{{ keyword.keyword_id }}"> </ul>
+        </li>
+    {% endfor %}
+</ul>
+<ul display="none" id="related-labs">
+</ul>
+
+
+{% endblock %}
