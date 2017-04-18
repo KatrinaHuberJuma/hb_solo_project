@@ -2,6 +2,8 @@
 <head>
     <title>{% block title %}TITLE HERE{% endblock %}</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    {% block styles %}TODO CSS links here{% endblock %}
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 </head>
 <body>
     <nav>
@@ -24,6 +26,7 @@
         {% if "student_id" not in session %}
             <a href="/clear_cohort"><button>All cohorts</button></a>
         {% endif %}
+        <a href="/keywords"><button>Keywords</button></a>
         
     </nav>
   {% for msg in get_flashed_messages() %}
@@ -36,7 +39,7 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="../static/admin.js"></script>
+<!-- <script type="text/javascript" src="../static/admin.js"></script> --> <!-- TODO move these to relevant templates -->
 <script type="text/javascript" src="../static/newStudent.js"></script>
 <script type="text/javascript" src="../static/keyword.js"></script>
 
@@ -48,7 +51,7 @@
     <script src="/static/boot.min.js"></script>
     <script src="/static/admin-spec.js"></script>
 {% endif %} -->
-
+{% block scripts %}Scripts here{% endblock %}
 
 
 </body>

@@ -2,8 +2,8 @@
 from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
 import unittest
 from server import app, session
-from test_seed import create_addy_admin, create_boudicca_cohort, create_students, create_labs, create_pair, create_keywords, associate_labs_to_keywords
-from helpers import create_lab_pair, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, return_labs_by_keyword_id
+from test_seed import create_addy_admin, create_boudicca_cohort, create_beth_and_ellen_students, create_labs, create_pair, create_keywords, associate_labs_to_keywords
+from helpers import create_lab_pair, return_other_students, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, return_labs_by_keyword_id
 ######################################################
 #TESTS FOR THE SERVER ALONE
 ######################################################
@@ -70,7 +70,7 @@ class RelationshipTests(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
 
         self.assertEqual('Beth Happy', Student.query
             .filter(Student.name == 'Beth Happy')
@@ -84,7 +84,7 @@ class RelationshipTests(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
 
         self.assertEqual('Boudicca', db.session
             .query(Student)
@@ -114,7 +114,7 @@ class RelationshipTests(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
         create_labs()
         create_pair()
 
@@ -131,7 +131,7 @@ class RelationshipTests(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
         create_labs()
         create_pair()
 
@@ -251,12 +251,16 @@ class RelationshipTests(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        students = create_students()
+        students = create_beth_and_ellen_students()
         labs = create_labs()
         lab_id = labs[1].lab_id
 
-        create_lab_pair(db=db, student_1_id=students[0].student_id,
-            student_2_id=students[1].student_id, lab_id=lab_id)
+        print "\n\nstudents=", students
+        create_lab_pair(db=db,
+            student_1_id=students[0].student_id,
+            student_2_id=students[1].student_id,
+            lab_id=lab_id,
+            notes="This is a test")
 
         self.assertEqual('Beth Happy', db.session
             .query(Pair)
@@ -279,7 +283,16 @@ class RelationshipTests(unittest.TestCase):
             .notes
             )
             
+    def test_return_other_students(self):
 
+        create_addy_admin()
+        create_boudicca_cohort()
+        students = create_beth_and_ellen_students()
+
+        other_students = return_other_students(db, excluded_ids=[1], cohort_id=1)
+
+        self.assertNotIn("Beth Happy", [student.name for student in other_students])
+        self.assertIn("Ellen Bellen", [student.name for student in other_students])
 
 
 
@@ -327,7 +340,7 @@ class ModelServerIntegration(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
 
         with self.client as c:
             with c.session_transaction() as sess:
@@ -341,7 +354,7 @@ class ModelServerIntegration(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
 
         result = self.client.get("/2-profile")
         self.assertIn("This is Ellen Bellen's profile", result.data)
@@ -360,7 +373,7 @@ class ModelServerIntegration(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
         create_labs()
         create_pair()
         create_keywords()
@@ -370,6 +383,7 @@ class ModelServerIntegration(unittest.TestCase):
         with self.client as c:
             with c.session_transaction() as sess:
                 sess["student_id"] = 1
+                sess["cohort_id"] = 1
 
         result = self.client.get("/lab/1")
         self.assertIn("Balloonicorn Melon Festival", result.data)

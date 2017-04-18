@@ -6,7 +6,7 @@ from datetime import datetime
 from flask import Flask, session, render_template, request, jsonify, flash, redirect, g
 from flask_debugtoolbar import DebugToolbarExtension
 import os, sys
-from helpers import create_lab_pair, create_association_keywords_to_lab, return_labs_by_keyword_id, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, create_cohort, return_all_keywords
+from helpers import create_lab_pair, return_lab_pairs, create_student, return_other_students, create_association_keywords_to_lab, return_labs_by_keyword_id, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, create_cohort, return_all_keywords, return_cohort_members
 
 
 app = Flask(__name__)
@@ -75,9 +75,7 @@ def homepage_post():
             student = valid_student
             session["student_id"] = student.student_id
             session["cohort_id"] = student.cohort_id
-            cohort_members = Student.query.filter(Student.cohort_id ==
-                session["cohort_id"]).all()
-
+            cohort_members = return_cohort_members(db, session["cohort_id"])
             flash("You are logged in now.")
             return redirect("/%s-profile" % session["student_id"])
 
@@ -106,11 +104,10 @@ def signedout():
 
     if "student_id" in session:
         del session["student_id"]
-        del session["cohort_id"]
     elif "admin_id" in session:
         del session["admin_id"]
-        if "cohort_id" in session:
-            del session["cohort_id"]
+    if "cohort_id" in session:
+        del session["cohort_id"]
 
     flash("You have signed out")
 
@@ -126,7 +123,6 @@ def clear_cohort():
         del session["cohort_id"]
 
     return redirect("/")
-
 
 
 ################################################################################
@@ -160,18 +156,78 @@ def lab_details(lab_id):
 
     lab = Lab.query.get(lab_id)
 
-    if "student_id" in session:
-        pairs = Pair.query.filter(Pair.lab_id == lab_id, \
-            db.or_(Pair.student_1_id == session["student_id"],\
-            Pair.student_2_id == session["student_id"])).all() 
-    else:
-        pairs = Pair.query.filter(Pair.lab_id == lab_id).all()
+
+    pairs = return_lab_pairs(db, lab_id)
+
+    ids_to_exclude = []
+
+    for pair in pairs:
+        ids_to_exclude.append(pair.student_1_id)
+        ids_to_exclude.append(pair.student_2_id)
 
     keywords = [x.keyword for x in lab.labs_keywords]
 
-    return render_template("lab_page.html", lab=lab, keywords=keywords, pairs=pairs)
+    students = return_other_students(db, excluded_ids=ids_to_exclude, cohort_id=session["cohort_id"])
+
+    return render_template("lab_page.html",
+                            lab=lab,
+                            keywords=keywords,
+                            pairs=pairs,
+                            students=students)
 
 
+
+################################################################################
+
+@app.route("/pair_students", methods=["POST"])
+def pair_students():
+
+    new_pair1 = request.form.get("new_pair1")
+    new_pair2 = request.form.get("new_pair2")
+    lab_id = request.form.get("lab_id")
+
+    new_lab_pair = create_lab_pair(db, int(new_pair1), int(new_pair2), int(lab_id))
+
+    pairs = return_lab_pairs(db, lab_id)
+
+
+    ids_to_exclude = []
+    paired_with_names_for_response = [] # {student_1_name:, student_1_id:, student_2_name:, student_2_id:, notes:}
+
+    for pair in pairs:
+        add_pair = {}
+        ids_to_exclude.append(pair.student_1_id)
+        add_pair["student_1_id"] = pair.student_1_id
+        add_pair["student_1_name"] = pair.student1.name
+
+        ids_to_exclude.append(pair.student_2_id)
+        add_pair["student_2_id"] = pair.student_2_id
+        add_pair["student_2_name"] = pair.student2.name
+
+        add_pair["notes"] = pair.notes
+
+        paired_with_names_for_response.append(add_pair)
+
+    unpaired_with_names_for_response = []
+
+    unpaired = return_other_students(db, excluded_ids=ids_to_exclude, cohort_id=session["cohort_id"])
+
+    for student in unpaired:
+        student_info = {}
+        student_info["student_id"] = student.student_id
+        student_info["student_name"] = student.name
+        unpaired_with_names_for_response.append(student_info)
+
+
+
+    # unpaired = return_other_students(db, excluded_ids)
+
+    response = {
+                "pairs": paired_with_names_for_response,
+                "unpaireds": unpaired_with_names_for_response 
+                }
+
+    return jsonify(response)
 
 ################################################################################
 
@@ -217,10 +273,6 @@ def add_cohort():
         grad_date=new_grad_date,
         admin_id=admin_id)
 
-    db.session.add(new_cohort)
-    db.session.commit()
-
-    db.session.refresh(new_cohort)
 
 
     if new_cohort.name == new_cohort_name and new_cohort.password == new_cohort_password:
@@ -294,13 +346,11 @@ def signup_student():
         Cohort.password == given_cohort_password).first()
 
     if valid_cohort_creds:
-        new_student = Student(name=new_student_name,
+        new_student = create_student(db, name=new_student_name,
             password=new_student_password,
             cohort_id=session["cohort_id"],
             email=new_student_email)
 
-        db.session.add(new_student)
-        db.session.commit()
 
         response = {
                     "string": new_student.name,
@@ -334,13 +384,10 @@ def add_keywords_to_lab():
 
     response = {
                 "new_words": new_keywords
-                }
+                } # TODO do i need this????
 
     return jsonify(new_keywords)
 
-
-
-    
 
 
 ################################################################################
@@ -350,7 +397,7 @@ def cohort_home(cohort_id):
 
     session["cohort_id"] = session.get("cohort_id", int(cohort_id))
 
-    cohort_members = Student.query.filter(Student.cohort_id == session["cohort_id"]).all()
+    cohort_members = return_cohort_members(db, session["cohort_id"])
     cohort = Cohort.query.get(session["cohort_id"])
     cohort_labs = Lab.query.filter(Lab.cohort_id == session["cohort_id"]).all()
     return render_template("cohort_home.html",

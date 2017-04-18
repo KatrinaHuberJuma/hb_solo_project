@@ -34,7 +34,11 @@ function showRelatedLabs(results) {
 
     if ($("#labs-of-" + results[0].keyword_id).html() === " "){
         for (var i = 0; i < results.length; i++){
-            $("#labs-of-" + results[i].keyword_id).append("<li><a href='/lab/" + results[i].lab_id + "'>" + results[i].lab_title + "</a></li>")
+            $("#labs-of-" + results[i].keyword_id).append("<li><a href='/lab/" + 
+                                                        results[i].lab_id + 
+                                                        "'>" + 
+                                                        results[i].lab_title + 
+                                                        "</a></li>")
         }
     } else {
         $("#labs-of-" + results[0].keyword_id).slideToggle()
@@ -44,13 +48,22 @@ function showRelatedLabs(results) {
 
 function submitKeywordId(evt) {
 
-    var keywordId = $(this).val();
-    var formInput ={
-        "keyword_id": keywordId
-    }
+    
 
-    evt.preventDefault();
-    $.post("/show_related_labs", formInput, showRelatedLabs)
+    if ($("#labs-of-" + $(this) === " ")){
+
+        var keywordId = $(this).val();
+        var formInput ={
+            "keyword_id": keywordId
+        }
+
+        evt.preventDefault();
+        $.post("/show_related_labs", formInput, showRelatedLabs)
+
+    } else {
+
+        $(this).slideToggle()
+    }
 }
 
 $("#keyword-list li button").click(submitKeywordId)

@@ -5,6 +5,7 @@
 {% block content %}
 
 <h1>This is {{ student_details.name }}'s profile</h1>
+<img src="{{ student_details.profile_pic }}">
 
 {% if student_details.student_id == session["student_id"] %}
     <h2 id="greet-signedin-student">Hey {{ student_details.name }}! Welcome to your own profile!</h2>

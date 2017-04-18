@@ -55,10 +55,10 @@ class Student(db.Model):
     cohort_id = db.Column(db.Integer,
                           db.ForeignKey('cohorts.cohort_id'),
                           nullable=False)
-    email = db.Column(db.String(20), nullable=False) # unique
+    email = db.Column(db.String, nullable=False) # unique
     password = db.Column(db.String(20), nullable=False)
     demo_vid = db.Column(db.String(100))
-    profile_pic = db.Column(db.String(100))
+    profile_pic = db.Column(db.String)
     bio = db.Column(db.String)
 
     cohort = db.relationship("Cohort", backref="students")

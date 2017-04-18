@@ -68,3 +68,75 @@ function submitNewLabInfo(evt) {
 }
 
 $('#create-lab').on('submit', submitNewLabInfo)
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+$('#new-pair').multiSelect({
+  afterSelect: function(values){
+    // if num of ms-selected = 2, disable all other students
+    if ($('.ms-selected').length > 2) {
+        $(".ms-elem-selectable").prop('disabled', true);
+        $(".ms-elem-selectable").addClass(".greyed-out"); // TODO why doesn't this work???
+    }
+
+  },
+  afterDeselect: function(values){
+    // if num of ms-selected < 2, reenable all other students
+    if ($('.ms-selected').length <= 2) {
+        $(".ms-elem-selectable").prop('disabled', false);
+    }
+  }
+});
+
+  $('#deselect-all').click(function(){
+    $('#new-pair').multiSelect('deselect_all');
+    return false;
+  });
+  $('#refresh').on('click', function(){
+    $('#new-pair').multiSelect('refresh');
+    return false;
+  });
+  $('#add-option').on('click', function(){
+    $('#new-pair').multiSelect('addOption', { value: 42, text: 'test 42', index: 0 });
+    return false;
+  });
+
+//------------------------------------------------------------------------------
+
+
+function showPairedStudents(results) {
+
+    $("#established-pairs").html(" ");
+
+    var pairs = results.pairs;
+    var unpaireds = results.unpaireds;
+
+    for (var pair of pairs){
+        $("#established-pairs").append("<li><h3>" + pair.student_1_name + 
+            " paired with " + pair.student_2_name + "</h3>notes: " + pair.notes + "</li>")
+    }
+
+    $("#new-pair").html(" ");
+
+    for (var unpaired of unpaireds) {
+        $("#new-pair").append("<option value='" + unpaired.student_id +"'>" + unpaired.student_name + "</option>") 
+    }
+
+    $('#new-pair').multiSelect('refresh')
+
+}
+
+function submitPairGroup(evt){
+
+    var formInput = {
+        "new_pair1": $("#new-pair").val()[0],
+        "new_pair2": $("#new-pair").val()[1],
+        "lab_id": $("#lab-id").val()
+    }
+    evt.preventDefault();
+    $.post("/pair_students", formInput, showPairedStudents)
+}
+
+
+$("#new-pairs").on("submit", submitPairGroup)

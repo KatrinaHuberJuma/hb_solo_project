@@ -1,5 +1,17 @@
 from model import Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
 from datetime import datetime
+import urllib, hashlib
+
+def create_gravatar_url(email):
+    default = "/static/img/switch.png"
+    size = 100
+     
+    # construct the url
+    gravatar_url = "https://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+    gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+
+    return gravatar_url
+
 def create_admin(db, name, github_link, email, profile_pic, password):
 
     ad = Admin(name=name, 
@@ -24,17 +36,35 @@ def create_cohort(db, name, password, grad_date, admin_id):
     db.session.commit()
     return new_cohort
 
+def create_student(db, name, cohort_id, email, password):
+    print "add proper github links"
 
-def create_lab_pair(db, student_1_id, student_2_id, lab_id):
+    gravatar_url = create_gravatar_url(email)
+
+    student = Student(name=name,
+        github_link="git.hub",
+        cohort_id=cohort_id,
+        email=email,
+        password=password,
+        profile_pic=gravatar_url)
+
+    db.session.add(student)
+    db.session.commit()
+
+    return student
+
+
+def create_lab_pair(db, student_1_id, student_2_id, lab_id, notes="No notes yet"):
     """creates lab pair, commits it to the database and returns the pair object"""
    
     pa = Pair(lab_id=lab_id,
         student_1_id=student_1_id,
         student_2_id=student_2_id,
-        notes="This is a test")
+        notes=notes)
 
     db.session.add(pa)
     db.session.commit()
+    return pa
 
 def create_multiple_keywords(db, keywords):
     """creates a keyword and adds it to the database"""
@@ -95,8 +125,24 @@ def return_keywords_ids(db, keywords):
     return kw_ids
 
 
-
-
 def return_labs_by_keyword_id(db, keyword_id):
     labs = db.session.query(Lab).filter(Lab.labs_keywords.any(LabKeyword.keyword_id ==keyword_id)).all()
     return labs
+
+def return_cohort_members(db, cohort_id):
+    cohort_members = Student.query.filter(Student.cohort_id == cohort_id).all()
+    return cohort_members
+
+
+def return_lab_pairs(db, lab_id):
+
+    pairs = Pair.query.filter(Pair.lab_id == lab_id).all()
+
+    return pairs
+
+def return_other_students(db, excluded_ids, cohort_id):
+
+    students = Student.query.filter(Student.cohort_id == cohort_id, ~Student.student_id.in_(excluded_ids)).all()
+    return students
+
+

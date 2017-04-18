@@ -2,7 +2,7 @@
 from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
 from datetime import datetime
 from server import app
-from helpers import create_admin, create_cohort
+from helpers import create_admin, create_cohort, create_lab_pair, create_student
 
 ######################################################
 #TEST DATA SEED
@@ -38,7 +38,7 @@ def create_boudicca_cohort():
 
   
 
-def create_students():
+def create_beth_and_ellen_students():
     """Adds two students (of one cohort) to the database
 
     Call create_admin(), create_boudicca_cohort() before calling this function
@@ -49,22 +49,19 @@ def create_students():
     bo_id = bo_from_db.cohort_id
 
 
-    beth = Student(name="Beth Happy",
-        github_link="git.hub",
+    beth = create_student(db,
+        name="Beth Happy",
         cohort_id=bo_id,
-        email="gmail.planetsave",
+        email="katrina.huber@gmail.com",
+        password="pw")
+   
+
+    ellen = create_student(db,
+        name="Ellen Bellen",
+        cohort_id=bo_id,
+        email="katrina.huber@gmail.com",
         password="pw")
 
-    db.session.add(beth)
-
-    ellen = Student(name="Ellen Bellen",
-        github_link="hub.git",
-        cohort_id=bo_id,
-        email="gmail.gmail",
-        password="pw")
-
-    db.session.add(ellen)
-    db.session.commit()
 
     return [beth, ellen]
 
@@ -99,7 +96,7 @@ def create_labs():
 def create_pair():
     """Creates a relationship between two students and a lab
 
-    Call create_admin(), create_boudicca_cohort(), create_students() 
+    Call create_admin(), create_boudicca_cohort(), create_beth_and_ellen_students() 
     and create_labs() before calling this function
     """
 
@@ -107,13 +104,14 @@ def create_pair():
     a_lab_id = Lab.query.first().lab_id
 
 
-    pa = Pair(lab_id=a_lab_id,
+    pa = create_lab_pair(db=db,
+        lab_id=a_lab_id,
         student_1_id=beth_and_ellen[0].student_id,
         student_2_id=beth_and_ellen[1].student_id,
         notes="We learned soooo much!")
 
-    db.session.add(pa)
-    db.session.commit()
+    
+
 
 
 def create_keywords():
@@ -162,7 +160,7 @@ if __name__ == "__main__":
         
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
         create_labs()
         create_pair()
         create_keywords()

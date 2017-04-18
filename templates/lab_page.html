@@ -2,6 +2,12 @@
 
 {% block title %} Kat Project Lab {% endblock %}
 
+{% block styles %}
+
+<link rel="stylesheet" type="text/css" href="../static/css/multi-select.css">
+
+{% endblock %}
+
 {% block content %}
 
 <h1>{{ lab.title }}</h1>
@@ -11,7 +17,7 @@
 
 
 <!-- {{ lab.date }} -->
-<ul>
+<ul id="established-pairs">
     {% for pair in pairs %}
     <li><h3>{{ pair.student1.name }} paired with {{ pair.student2.name }}</h3>
         notes: {{ pair.notes }}</li>
@@ -39,8 +45,31 @@
 
 {% endif %}
 
+{% if "admin_id" in session %}
+<hr>
+    <h3>Pair Students for this Lab</h3>
+    <a href='#' id='deselect-all'>deselect all</a>
+    <form id="new-pairs">
+        <select id='new-pair' multiple='multiple'>
+          {% for student in students %}
+          <option value='{{ student.student_id }}'>{{ student.name }}</option>
+          {% endfor %}
+        </select>
+        <input type="hidden" id="lab-id" name="lab_id" value="{{ lab.lab_id }}">
+        <input type="submit">
+    </form>
+{% endif %}
+
+
+
+{% endblock %}
 
 
 
 
+
+{% block scripts %}
+<script src="../static/jquery.multi-select.js"></script>
+
+<script type="text/javascript" src="../static/admin.js"></script>
 {% endblock %}
