@@ -37,7 +37,6 @@ def create_cohort(db, name, password, grad_date, admin_id):
     return new_cohort
 
 def create_student(db, name, cohort_id, email, password):
-    print "add proper github links"
 
     gravatar_url = create_gravatar_url(email)
 
@@ -146,3 +145,32 @@ def return_other_students(db, excluded_ids, cohort_id):
     return students
 
 
+
+def student_update(student, field, new_value):
+
+    if field == "bio":
+        student.bio = new_value
+
+    if field == "github_link":
+        student.github_link = new_value
+
+    if field == "email":
+        student.email = new_value
+
+    if field == "demo_vid":
+        student.demo_vid = new_value
+
+    if field == "password":
+        student.password = new_value
+
+
+def student_many_fields_update(db, student, updates):
+
+    # updates = [{field:whatev, new_value: whatev}, ... {}]
+
+    for update in updates:
+        student_update(student=student,
+            field=update["field"],
+            new_value=update["new_value"])
+
+    db.session.commit()

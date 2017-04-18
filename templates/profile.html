@@ -8,7 +8,8 @@
 <img src="{{ student_details.profile_pic }}">
 
 {% if student_details.student_id == session["student_id"] %}
-    <h2 id="greet-signedin-student">Hey {{ student_details.name }}! Welcome to your own profile!</h2>
+    <h4 id="greet-signedin-student">Hey {{ student_details.name }}! Welcome to your profile!</h4>
+    <h5><a href="/update_{{ student_details.student_id }}_profile">Update your profile</a></h5>
 {% endif %}
 
 

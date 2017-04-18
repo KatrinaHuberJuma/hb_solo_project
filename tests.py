@@ -3,7 +3,7 @@ from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword,
 import unittest
 from server import app, session
 from test_seed import create_addy_admin, create_boudicca_cohort, create_beth_and_ellen_students, create_labs, create_pair, create_keywords, associate_labs_to_keywords
-from helpers import create_lab_pair, return_other_students, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, return_labs_by_keyword_id
+from helpers import create_lab_pair, student_update, return_other_students, student_many_fields_update, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, return_labs_by_keyword_id
 ######################################################
 #TESTS FOR THE SERVER ALONE
 ######################################################
@@ -294,6 +294,33 @@ class RelationshipTests(unittest.TestCase):
         self.assertNotIn("Beth Happy", [student.name for student in other_students])
         self.assertIn("Ellen Bellen", [student.name for student in other_students])
 
+    def test_student_update(self):
+
+        create_addy_admin()
+        create_boudicca_cohort()
+        students = create_beth_and_ellen_students()
+
+        self.assertEqual(None, 
+            Student.query.filter(Student.student_id ==
+            1).first().bio)
+
+        student = Student.query.filter(Student.student_id == 1).first()
+
+        student_many_fields_update(db,
+            student= student,
+            updates=[
+                    {"field": "bio", "new_value": "came frome the east to the west"},
+                    {"field": "github_link", "new_value": "yo.hub"}
+                    ])
+
+
+        self.assertEqual("came frome the east to the west", 
+            Student.query.filter(Student.student_id ==
+            1).first().bio)
+
+        self.assertEqual("yo.hub", 
+            Student.query.filter(Student.student_id ==
+            1).first().github_link)
 
 
 ######################################################

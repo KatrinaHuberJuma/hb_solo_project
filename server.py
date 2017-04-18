@@ -6,8 +6,8 @@ from datetime import datetime
 from flask import Flask, session, render_template, request, jsonify, flash, redirect, g
 from flask_debugtoolbar import DebugToolbarExtension
 import os, sys
-from helpers import create_lab_pair, return_lab_pairs, create_student, return_other_students, create_association_keywords_to_lab, return_labs_by_keyword_id, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, create_cohort, return_all_keywords, return_cohort_members
-
+from helpers import create_lab_pair, student_many_fields_update, return_lab_pairs, create_student, return_other_students, create_association_keywords_to_lab, return_labs_by_keyword_id, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, create_cohort, return_all_keywords, return_cohort_members
+import json
 
 app = Flask(__name__)
 app.secret_key = os.environ['secret_key']
@@ -134,6 +134,32 @@ def display_profile(student_id):
     student_details = Student.query.filter(Student.student_id == student_id).one()
 
     return render_template("profile.html", student_details=student_details)
+
+
+################################################################################
+
+@app.route("/update_<student_id>_profile")
+def update_student_profile(student_id):
+
+    student = Student.query.filter(Student.student_id == student_id).one()
+
+    return render_template("update_student_profile.html", student=student)
+
+
+################################################################################
+
+@app.route("/post_student_update", methods=["POST"])
+def post_update_student_profile():
+
+    student = Student.query.filter(Student.student_id == session['student_id']).one()
+
+    all_fields = request.form.get("all_fields")
+    updates = json.loads(all_fields)
+
+    student_many_fields_update(db, student=student, updates=updates)
+
+    return redirect("/")
+
 
 
 ################################################################################

@@ -58,11 +58,11 @@ function submitKeywordId(evt) {
         }
 
         evt.preventDefault();
-        $.post("/show_related_labs", formInput, showRelatedLabs)
+        $.post("/show_related_labs", formInput, showRelatedLabs);
 
     } else {
 
-        $(this).slideToggle()
+        $(this).slideToggle();
     }
 }
 
