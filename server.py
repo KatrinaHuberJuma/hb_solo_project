@@ -5,9 +5,26 @@ from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword,
 from datetime import datetime
 from flask import Flask, session, render_template, request, jsonify, flash, redirect, g
 from flask_debugtoolbar import DebugToolbarExtension
-import os, sys
-from helpers import create_lab_pair, create_lab, student_many_fields_update, return_lab_pairs, create_student, return_other_students, create_association_keywords_to_lab, return_labs_by_keyword_id, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, create_cohort, return_all_keywords, return_cohort_members
-import json
+import os, sys, json
+from helpers import (
+                    create_association_keywords_to_lab,
+                    create_cohort,
+                    create_lab_pair,
+                    create_lab,
+                    create_student,
+                    return_all_keywords,
+                    return_certain_keywords_ids,
+                    return_cohort_members,
+                    return_keywords_ids,
+                    return_lab_pairs,
+                    return_labs_by_keyword_id,
+                    create_multiple_keywords,
+                    return_other_students,
+                    return_pair_details,
+                    update_many_student_fields,
+                    update_pair_notes
+                    )
+# import json TODO 
 
 app = Flask(__name__)
 app.secret_key = os.environ['secret_key']
@@ -156,7 +173,7 @@ def post_update_student_profile():
     all_fields = request.form.get("all_fields")
     updates = json.loads(all_fields)
 
-    student_many_fields_update(db, student=student, updates=updates)
+    update_many_student_fields(db, student=student, updates=updates)
 
     response = {
                 "bio": student.bio,
@@ -210,8 +227,44 @@ def lab_details(lab_id):
                             students=students)
 
 
+################################################################################
+
+@app.route("/pair/<pairing_id>")
+def pair_page(pairing_id):
+
+
+    pair_details = return_pair_details(db, pairing_id)
+
+    lab = pair_details["lab"]
+    student1 = pair_details["student1"]
+    student2 = pair_details["student2"]
+    notes = pair_details["notes"]
+    pair_id = pair_details["pairing_id"]
+    # TODO
+    return render_template("pair.html", pair_id=pair_id, notes=notes, lab=lab, student1=student1, student2=student2)
+
 
 ################################################################################
+
+@app.route("/update-pair-notes", methods=["POST"])
+def update_pair_lab_notes():
+
+    notes = request.form.get("pair_notes")
+    pair_id = request.form.get("pair_id")
+
+    update_pair_notes(db, pairing_id=pair_id, new_value=notes)
+
+    response = {
+                "newNotes": notes
+                }
+
+    return jsonify(response)
+
+
+
+
+################################################################################
+
 
 @app.route("/pair_students", methods=["POST"])
 def pair_students():
@@ -429,8 +482,6 @@ def cohort_home(cohort_id):
         cohort_members=cohort_members,
         cohort=cohort,
         cohort_labs=cohort_labs)
-
-
 
 
 

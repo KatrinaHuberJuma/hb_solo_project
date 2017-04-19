@@ -19,8 +19,13 @@
 <!-- {{ lab.date }} -->
 <ul id="established-pairs">
     {% for pair in pairs %}
-    <li><h3>{{ pair.student1.name }} paired with {{ pair.student2.name }}</h3>
-        notes: {{ pair.notes }}</li>
+        {% if pair.student1.student_id == session["student_id"] %}
+            <li><h2><a href="/pair/{{ pair.pairing_id }}">{{ pair.student1.name }} paired with {{ pair.student2.name }}</a></h2>
+                notes: {{ pair.notes }}</li>
+        {% else %}
+            <li><h3><a href="/pair/{{ pair.pairing_id }}">{{ pair.student1.name }} paired with {{ pair.student2.name }}</a></h3>
+                notes: {{ pair.notes }}</li>
+        {% endif %}
     {% endfor %}
 </ul>
 

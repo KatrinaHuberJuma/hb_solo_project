@@ -4,7 +4,7 @@ from time import sleep
 from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword, LabKeyword
 from server import app
 from selenium import webdriver
-from test_seed import create_addy_admin, create_boudicca_cohort, create_students
+from test_seed import create_addy_admin, create_boudicca_cohort, create_beth_and_ellen_students
 
 
 class UserSignin(unittest.TestCase):
@@ -20,7 +20,7 @@ class UserSignin(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
 
         cls.browser = webdriver.Chrome()
 
@@ -73,7 +73,7 @@ class UserSignin(unittest.TestCase):
         sleep(1)   
         self.browser.get('http://localhost:5000/1-profile') # TODO do I still need this if I remove from server.py DebudToolbarExtention(app)? 
         self.assertEqual(self.browser.find_element_by_id("greet-signedin-student")
-            .get_attribute("innerHTML"), "Hey Beth Happy! Welcome to your own profile!")
+            .get_attribute("innerHTML"), "Hey Beth Happy! Welcome to your profile!")
 
 
 ################################################################################
@@ -174,7 +174,7 @@ class NewStudent(unittest.TestCase):
 
         create_addy_admin()
         create_boudicca_cohort()
-        create_students()
+        create_beth_and_ellen_students()
 
         cls.browser = webdriver.Chrome()
 

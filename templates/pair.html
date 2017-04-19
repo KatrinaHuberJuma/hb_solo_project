@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} Kat Project Lab {% endblock %}
+
+{% block styles %}
+
+<link rel="stylesheet" type="text/css" href="../static/css/multi-select.css">
+
+{% endblock %}
+
+{% block content %}
+
+<h1><a href="/{{ student1.student_id }}-profile">{{ student1.name }}&#39;s</a> and <a href="/{{ student2.student_id }}-profile">{{ student2.name }}&#39;s</a> &ldquo;{{ lab.title }}&rdquo; notes</h1>
+
+
+{% if session["student_id"] in [student1.student_id, student2.student_id] %}
+<div id="submitted-notes">
+
+</div>
+<hr>
+    <form id="update-pair-notes">
+        <p>Edit your lab notes:</p>
+        <textarea form="update-pair-notes" id="update-notes" rows="4" cols="50" >{{ notes }}</textarea><br>
+        <input id="pair-id" type="hidden" value="{{ pair_id }}">
+        <input type="submit"><br>
+    </form>
+{% else %}
+    <div>{{ notes }}</div>
+{% endif %}
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script type="text/javascript" src="../static/student.js"></script>
+{% endblock %}

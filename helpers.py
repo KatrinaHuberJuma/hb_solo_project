@@ -138,7 +138,7 @@ def return_other_students(db, excluded_ids, cohort_id):
     students = Student.query.filter(Student.cohort_id == cohort_id, ~Student.student_id.in_(excluded_ids)).all()
     return students
 
-def student_update(student, field, new_value):
+def update_student_field(student, field, new_value):
 
     if field == "bio":
         student.bio = new_value
@@ -158,17 +158,17 @@ def student_update(student, field, new_value):
     if field == "profile_pic":
         student.profile_pic = new_value
 
-def student_many_fields_update(db, student, updates):
+def update_many_student_fields(db, student, updates):
 
     # updates = [{field:whatev, new_value: whatev}, ... {}]
 
     for update in updates:
-        student_update(student=student,
+        update_student_field(student=student,
             field=update["field"],
             new_value=update["new_value"])
         if update["field"] == "email":
             gravatar_url = create_gravatar_url(update["new_value"])
-            student_update(student=student,
+            update_student_field(student=student,
                 field="profile_pic",
                 new_value=gravatar_url)
 
@@ -187,3 +187,23 @@ def create_lab(db, title, description, cohort_id, date, instructions):
     db.session.add(new_lab)
     db.session.commit()
     return new_lab
+
+def return_pair_details(db, pairing_id):
+
+    pair = Pair.query.filter(Pair.pairing_id == pairing_id).join(Lab).first()
+    students = Student.query.filter(Student.student_id.in_([pair.student1.student_id, pair.student2.student_id])).all()
+    pair_details = {
+                    "lab": pair.lab,
+                    "student1": pair.student1,
+                    "student2": pair.student2,
+                    "notes": pair.notes,
+                    "pairing_id": pair.pairing_id
+                    }
+    return pair_details
+
+def update_pair_notes(db, pairing_id, new_value):
+
+    pair = Pair.query.get(pairing_id)
+    pair.notes = new_value
+
+    db.session.commit()

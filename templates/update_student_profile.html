@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Kat Update Student Profile {% endblock %}
+
+{% block content %}
+
+<h1>{{ student.name }}</h1>
+<div id="profile-pic"><img src="{{ student.profile_pic }}"></div>
+
+{% if student.student_id == session["student_id"] %}
+
+
+    <div>
+        <h4 id="bio-title">Old Bio</h4>
+        <p id="bio-content">{{ student.bio }}</p>
+        <h4 id="email-title">Old email</h4>
+        <p id="email-content">{{ student.email }}</p>
+        <h4 id="github-link-title"><a target='_blank' href="{{ student.github_link }}">Old Github link</a></h4>
+        <h4 id="demo-link-title"><a target='_blank' href="{{ student.demo_vid }}">Old Demo Video Link</a></h4>
+    </div>
+    
+
+
+
+
+
+
+    <form id="update-student-details">
+        <textarea form="update-student-details" id="update-bio" rows="4" cols="50" placeholder="Enter new biography here..."></textarea><br>
+        <input type="text" id="update-github-link">Github Link<br>
+        <input type="text" id="update-email">Email<br>
+        <input type="text" id="update-demo-link">Demo Video Link<br>
+        <input type="password" id="update-password">Password<br>
+        <input type="submit"><br>
+    </form>
+    
+
+{% else %}
+<h1>You're not {{ student.name }}. You shouldn't be here, go back now</h1>
+{% endif %}
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script type="text/javascript" src="../static/student.js"></script>
+{% endblock %}

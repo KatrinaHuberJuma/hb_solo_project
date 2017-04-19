@@ -3,7 +3,7 @@ from model import connect_to_db, db, Admin, Cohort, Student, Lab, Pair, Keyword,
 import unittest
 from server import app, session
 from test_seed import create_addy_admin, create_boudicca_cohort, create_beth_and_ellen_students, create_labs, create_pair, create_keywords, associate_labs_to_keywords
-from helpers import create_lab_pair, student_update, return_other_students, student_many_fields_update, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, return_labs_by_keyword_id
+from helpers import create_lab_pair, return_pair_details, return_other_students, update_pair_notes, update_many_student_fields, create_association_keywords_to_lab, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, return_labs_by_keyword_id
 ######################################################
 #TESTS FOR THE SERVER ALONE
 ######################################################
@@ -255,7 +255,6 @@ class RelationshipTests(unittest.TestCase):
         labs = create_labs()
         lab_id = labs[1].lab_id
 
-        print "\n\nstudents=", students
         create_lab_pair(db=db,
             student_1_id=students[0].student_id,
             student_2_id=students[1].student_id,
@@ -306,7 +305,7 @@ class RelationshipTests(unittest.TestCase):
 
         student = Student.query.filter(Student.student_id == 1).first()
 
-        student_many_fields_update(db,
+        update_many_student_fields(db,
             student= student,
             updates=[
                     {"field": "bio", "new_value": "came frome the east to the west"},
@@ -322,6 +321,48 @@ class RelationshipTests(unittest.TestCase):
             Student.query.filter(Student.student_id ==
             1).first().github_link)
 
+    def test_return_pair_details(self):
+
+        create_addy_admin()
+        create_boudicca_cohort()
+        students = create_beth_and_ellen_students()
+        labs = create_labs()
+        lab_id = labs[1].lab_id
+
+        pair = create_lab_pair(db=db,
+            student_1_id=students[0].student_id,
+            student_2_id=students[1].student_id,
+            lab_id=lab_id,
+            notes="This is a test")
+
+        pair_details = return_pair_details(db, pair.pairing_id)
+
+        self.assertEqual("Yay", pair_details["lab"].title)
+        self.assertEqual("Beth Happy", pair_details["student1"].name)
+        self.assertEqual("Ellen Bellen", pair_details["student2"].name)
+
+
+    def test_update_pair_notes(self):
+
+        create_addy_admin()
+        create_boudicca_cohort()
+        students = create_beth_and_ellen_students()
+        labs = create_labs()
+        lab_id = labs[1].lab_id
+
+        pair = create_lab_pair(db=db,
+            student_1_id=students[0].student_id,
+            student_2_id=students[1].student_id,
+            lab_id=lab_id,
+            notes="This is a test")
+
+        pair_id = pair.pairing_id
+
+        pair_details = return_pair_details(db, pair_id)
+
+        update_pair_notes(db, pair_id, "new notes, yay!")
+
+        self.assertNotEqual("This is a test", Pair.query.get(pair_id).notes)
 
 ######################################################
 #TESTS FOR THE DATABASE AND SERVER INTEGRATION
