@@ -180,8 +180,7 @@ def post_update_student_profile():
 @app.route("/labs")
 def labs():
     """display the lab history"""
-
-    # labs = Lab.query.all() # TODO specify cohort
+    
     labs = db.session.query(Lab).order_by(Lab.date).join(Cohort).all()
 
     return render_template("labs.html", labs=labs)

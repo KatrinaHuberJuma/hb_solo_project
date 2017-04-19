@@ -7,16 +7,13 @@
 </head>
 <body>
     <nav>
+        <a href="/"><button>Home</button></a>
         {% if "student_id" in session %}
             <a href="/signedout"><button>Log out</button></a>
 
         {% elif "admin_id" in session %}
             <a href="/signedout"><button>Log out</button></a>
             <a href="/labs"><button>All Labs</button></a>
-
-        {% else %}
-            <a id="signin" href="/signin"><button>Log in</button></a>
-
         {% endif %}
 
         {% if "cohort_id" in session %}
@@ -27,6 +24,7 @@
             <a href="/clear_cohort"><button>All cohorts</button></a>
         {% endif %}
         <a href="/keywords"><button>Keywords</button></a>
+
         
     </nav>
   {% for msg in get_flashed_messages() %}

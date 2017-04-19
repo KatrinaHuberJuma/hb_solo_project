@@ -8,23 +8,21 @@
 
 
 {% if "student_id" not in session and "admin_id" not in session %}
-<h4>Returning user?</h4>
-<h5>Sign in here!</h5>
-    {% include 'signin.html' %}
-{% endif %}
+    <h3>New student?</h3>
+        <h4>Select the cohort you are joining!</h4>
+            {% include 'cohort_list.html' %}
+    <h3>Returning user?</h3>
+        <h4>Sign in here!</h4>
+            {% include 'signin.html' %}
+{% else %}
 
+    <h3>All Cohorts</h3>
+        {% include 'cohort_list.html' %}
 
-{% if "student_id" not in session %}
-    <h2>Cohorts:</h2>
-    <ul id="cohort-list">
-        {% for cohort in cohorts %}
-            <li><a href="cohort{{ cohort.cohort_id }}" id="cohort{{loop.index}}">{{ cohort.name }}</a></li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    {% if "admin_id" in session %}
+        {% include 'admin_home.html' %}
+    {% endif %}
 
-{% if "admin_id" in session %}
-    {% include 'admin_home.html' %}
 {% endif %}
 
 
