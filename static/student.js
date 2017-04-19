@@ -85,7 +85,6 @@ function showUpdatedNotes(results) {
 }
 
 
-
 function submitUpdatedNotes(evt) {
     var formInput = {
         "pair_notes": $("#update-notes").val(),

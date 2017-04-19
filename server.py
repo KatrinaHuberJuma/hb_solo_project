@@ -98,19 +98,7 @@ def homepage_post():
 
 
     flash("invalid login")
-    return redirect("/signin")
-
-
-################################################################################
-
-@app.route("/signin")
-def signinpage():
-    """Show signin"""
-
-    # TODO: if not signed in, redirect to signin page
-
-    return render_template("signin.html")
-
+    return redirect("/")
 
 
 ################################################################################
@@ -218,7 +206,7 @@ def lab_details(lab_id):
 
     keywords = [x.keyword for x in lab.labs_keywords]
 
-    students = return_other_students(db, excluded_ids=ids_to_exclude, cohort_id=session["cohort_id"])
+    students = return_other_students(db, excluded_ids=ids_to_exclude, cohort_id=lab.cohort_id)
 
     return render_template("lab_page.html",
                             lab=lab,
