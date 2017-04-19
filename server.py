@@ -158,7 +158,15 @@ def post_update_student_profile():
 
     student_many_fields_update(db, student=student, updates=updates)
 
-    return redirect("/")
+    response = {
+                "bio": student.bio,
+                "email": student.email,
+                "demoVid": student.demo_vid,
+                "githubLink": student.github_link,
+                "profilePic": student.profile_pic
+                }
+
+    return jsonify(response)
 
 
 

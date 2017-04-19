@@ -41,7 +41,6 @@ def create_student(db, name, cohort_id, email, password):
     gravatar_url = create_gravatar_url(email)
 
     student = Student(name=name,
-        github_link="git.hub",
         cohort_id=cohort_id,
         email=email,
         password=password,
@@ -163,6 +162,9 @@ def student_update(student, field, new_value):
     if field == "password":
         student.password = new_value
 
+    if field == "profile_pic":
+        student.profile_pic = new_value
+
 
 def student_many_fields_update(db, student, updates):
 
@@ -172,5 +174,11 @@ def student_many_fields_update(db, student, updates):
         student_update(student=student,
             field=update["field"],
             new_value=update["new_value"])
+        if update["field"] == "email":
+            gravatar_url = create_gravatar_url(update["new_value"])
+            student_update(student=student,
+                field="profile_pic",
+                new_value=gravatar_url)
+
 
     db.session.commit()
