@@ -13,15 +13,14 @@
     {% include 'signin.html' %}
 {% endif %}
 
+
 {% if "student_id" not in session %}
-    {% if "admin_id" not in session %}
-        <h2>Cohorts:</h2>
-        <ul id="cohort-list">
-            {% for cohort in cohorts %}
-                <li><a href="cohort{{ cohort.cohort_id }}" id="cohort{{loop.index}}">{{ cohort.name }}</a></li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <h2>Cohorts:</h2>
+    <ul id="cohort-list">
+        {% for cohort in cohorts %}
+            <li><a href="cohort{{ cohort.cohort_id }}" id="cohort{{loop.index}}">{{ cohort.name }}</a></li>
+        {% endfor %}
+    </ul>
 {% endif %}
 
 {% if "admin_id" in session %}
