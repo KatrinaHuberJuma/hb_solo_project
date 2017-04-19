@@ -4,12 +4,12 @@
 
 {% block content %}
 
-<h1>This is {{ student_details.name }}'s profile</h1>
-<img src="{{ student_details.profile_pic }}">
+<h1>This is {{ student.name }}'s profile</h1>
+<img src="{{ student.profile_pic }}">
 
-{% if student_details.student_id == session["student_id"] %}
-    <h4 id="greet-signedin-student">Hey {{ student_details.name }}! Welcome to your profile!</h4>
-    <h5><a href="/update_{{ student_details.student_id }}_profile">Update your profile</a></h5>
+{% if student.student_id == session["student_id"] %}
+    <h4 id="greet-signedin-student">Hey {{ student.name }}! Welcome to your profile!</h4>
+    <h5><a href="/update_{{ student.student_id }}_profile">Update your profile</a></h5>
 {% endif %}
 
 

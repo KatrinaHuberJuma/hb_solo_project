@@ -131,9 +131,9 @@ def clear_cohort():
 def display_profile(student_id):
     """Display a student profile"""
 
-    student_details = Student.query.filter(Student.student_id == student_id).one()
+    student = Student.query.filter(Student.student_id == student_id).first()
 
-    return render_template("profile.html", student_details=student_details)
+    return render_template("profile.html", student=student)
 
 
 ################################################################################

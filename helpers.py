@@ -3,7 +3,7 @@ from datetime import datetime
 import urllib, hashlib
 
 def create_gravatar_url(email):
-    default = "/static/img/switch.png"
+    default = "http://i.imgur.com/hfH9CiC.png"
     size = 100
      
     # construct the url

@@ -57,7 +57,7 @@ class Student(db.Model):
                           nullable=False)
     email = db.Column(db.String, nullable=False) # unique
     password = db.Column(db.String(20), nullable=False)
-    demo_vid = db.Column(db.String(100))
+    demo_vid = db.Column(db.String)
     profile_pic = db.Column(db.String)
     bio = db.Column(db.String)
 
