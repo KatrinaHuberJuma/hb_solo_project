@@ -79,6 +79,7 @@ class Lab(db.Model):
                           db.ForeignKey('cohorts.cohort_id'),
                           nullable=False)
     description = db.Column(db.String)
+    instructions = db.Column(db.String)
     date = db.Column(db.DateTime)
 
     cohort = db.relationship("Cohort", backref="labs")

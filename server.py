@@ -6,7 +6,7 @@ from datetime import datetime
 from flask import Flask, session, render_template, request, jsonify, flash, redirect, g
 from flask_debugtoolbar import DebugToolbarExtension
 import os, sys
-from helpers import create_lab_pair, student_many_fields_update, return_lab_pairs, create_student, return_other_students, create_association_keywords_to_lab, return_labs_by_keyword_id, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, create_cohort, return_all_keywords, return_cohort_members
+from helpers import create_lab_pair, create_lab, student_many_fields_update, return_lab_pairs, create_student, return_other_students, create_association_keywords_to_lab, return_labs_by_keyword_id, create_multiple_keywords, return_certain_keywords_ids, return_keywords_ids, create_cohort, return_all_keywords, return_cohort_members
 import json
 
 app = Flask(__name__)
@@ -333,30 +333,21 @@ def add_lab():
     new_lab_name = request.form.get("new_lab_name")
     new_lab_description = request.form.get("new_lab_description")
     new_lab_date = request.form.get("new_lab_date")
+    new_lab_instructions = request.form.get("new_lab_instructions")
     admin_id = session["admin_id"]
 
-    new_lab = Lab(title=new_lab_name,
+    new_lab = create_lab(db, title=new_lab_name,
         description=new_lab_description,
         cohort_id=session["cohort_id"],
-        date=datetime.strptime(new_lab_date,"%Y-%m-%d")) 
+        date=new_lab_date,
+        instructions=new_lab_instructions) 
 
 
-    db.session.add(new_lab)
-    db.session.commit()
+    response = {
+                "string": new_lab.title,
+                "createdId": new_lab.lab_id
+                }
 
-    db.session.refresh(new_lab)
-
-
-    if new_lab.title == new_lab_name and new_lab.description == new_lab_description:
-        response = {
-                    "string": new_lab.title,
-                    "createdId": new_lab.lab_id
-                    }
-
-    else:
-        response = {"string": "Not added",
-                    "createdId": "fail"
-                    }
 
 
     return jsonify(response)

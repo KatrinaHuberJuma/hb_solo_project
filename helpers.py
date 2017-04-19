@@ -23,7 +23,6 @@ def create_admin(db, name, github_link, email, profile_pic, password):
     db.session.add(ad)
     db.session.commit()
 
-
 def create_cohort(db, name, password, grad_date, admin_id):
 
     new_cohort = Cohort(name=name,
@@ -50,7 +49,6 @@ def create_student(db, name, cohort_id, email, password):
     db.session.commit()
 
     return student
-
 
 def create_lab_pair(db, student_1_id, student_2_id, lab_id, notes="No notes yet"):
     """creates lab pair, commits it to the database and returns the pair object"""
@@ -94,7 +92,6 @@ def return_all_keywords(db):
 
     return keywords
 
-
 def return_certain_keywords_ids(db, keywords):
 
     certain_keywords = Keyword.query.filter(Keyword.keyword.in_(keywords)).all()
@@ -122,7 +119,6 @@ def return_keywords_ids(db, keywords):
 
     return kw_ids
 
-
 def return_labs_by_keyword_id(db, keyword_id):
     labs = db.session.query(Lab).filter(Lab.labs_keywords.any(LabKeyword.keyword_id ==keyword_id)).all()
     return labs
@@ -130,7 +126,6 @@ def return_labs_by_keyword_id(db, keyword_id):
 def return_cohort_members(db, cohort_id):
     cohort_members = Student.query.filter(Student.cohort_id == cohort_id).all()
     return cohort_members
-
 
 def return_lab_pairs(db, lab_id):
 
@@ -142,8 +137,6 @@ def return_other_students(db, excluded_ids, cohort_id):
 
     students = Student.query.filter(Student.cohort_id == cohort_id, ~Student.student_id.in_(excluded_ids)).all()
     return students
-
-
 
 def student_update(student, field, new_value):
 
@@ -165,7 +158,6 @@ def student_update(student, field, new_value):
     if field == "profile_pic":
         student.profile_pic = new_value
 
-
 def student_many_fields_update(db, student, updates):
 
     # updates = [{field:whatev, new_value: whatev}, ... {}]
@@ -182,3 +174,16 @@ def student_many_fields_update(db, student, updates):
 
 
     db.session.commit()
+
+def create_lab(db, title, description, cohort_id, date, instructions):
+
+    new_lab = Lab(title=title,
+        description=description,
+        cohort_id=cohort_id,
+        date=datetime.strptime(date,"%Y-%m-%d"),
+        instructions=instructions) 
+
+
+    db.session.add(new_lab)
+    db.session.commit()
+    return new_lab

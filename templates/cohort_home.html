@@ -53,11 +53,13 @@
     <h3>Create new Lab</h3>
 
     <form id="create-lab">
-        <input id="enter-lab-name" type="text" 
+        <textarea required id="enter-lab-description" type="text" 
+            name="new_lab_description" placeholder="Lab Description"></textarea><br>
+        <input required id="enter-lab-name" type="text" 
             name="new_lab_name" placeholder="Lab Name">
-        <input id="enter-lab-description" type="text" 
-            name="new_lab_description" placeholder="Lab Description">
-        <input id="enter-lab-date" type="date" name="new_lab_date">     
+        <input required id="enter-lab-instructions" type="text" 
+            name="new_lab_instructions" placeholder="Lab Instructions Link">
+        <input required id="enter-lab-date" type="date" name="new_lab_date">     
         <input type="submit">
     </form>
 

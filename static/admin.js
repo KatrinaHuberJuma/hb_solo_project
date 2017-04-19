@@ -60,6 +60,7 @@ function submitNewLabInfo(evt) {
     var formInput = {
         "new_lab_name": $("#enter-lab-name").val(),
         "new_lab_description": $("#enter-lab-description").val(),
+        "new_lab_instructions": $("#enter-lab-instructions").val(),
         "new_lab_date": labDate
     }
 
