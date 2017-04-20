@@ -1,0 +1,5 @@
+<ul id="cohort-list">
+    {% for cohort in cohorts %}
+        <li><a href="cohort{{ cohort.cohort_id }}" id="cohort{{loop.index}}">{{ cohort.name }}</a></li>
+    {% endfor %}
+</ul>
