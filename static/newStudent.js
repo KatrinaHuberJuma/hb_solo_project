@@ -6,7 +6,9 @@ function showNewStudent(results) {
     var resultString = results.string
     var resultId = results.createdId
 
-    $("#student-list").append("<li><a id='new-student' href='/" + resultId + "-profile'>" + resultString + "</a></li>")
+    $("#student-list").append("<li class='#newly-arrived'>You, " + resultString + 
+        "!<ul><li><a id='new-student' href='/" + resultId + 
+        "-profile'>Visit your profile</a></li></ul></li>")
 
     $("#join-cohort-form").slideUp()
 
