@@ -87,13 +87,13 @@ def create_association_keywords_to_lab(db, lab_id, keywords_ids):
     db.session.commit()
 
 def return_all_keywords(db):
-
+    
     keywords = Keyword.query.order_by(Keyword.keyword).all()
 
     return keywords
 
 def return_certain_keywords_ids(db, keywords):
-
+    # TODO find the empty list in the test file
     certain_keywords = Keyword.query.filter(Keyword.keyword.in_(keywords)).all()
     certain_keywords_ids = [keyword.keyword_id for keyword in certain_keywords]
     return certain_keywords_ids
@@ -120,7 +120,9 @@ def return_keywords_ids(db, keywords):
     return kw_ids
 
 def return_labs_by_keyword_id(db, keyword_id):
+    print "\n\n\n in return labs by keyword", keyword_id
     labs = db.session.query(Lab).filter(Lab.labs_keywords.any(LabKeyword.keyword_id ==keyword_id)).all()
+    print labs
     return labs
 
 def return_cohort_members(db, cohort_id):

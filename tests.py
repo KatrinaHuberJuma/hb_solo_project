@@ -211,20 +211,28 @@ class RelationshipTests(unittest.TestCase):
         labs = create_labs()    
         mel_fest_keywords = ["outside", "melon", "fun", "goodness"]
         yay_keywords = ["excite", "yes", "goodness"]
-        # other_cohort_keywords = ["no", "not", "bad"]
+
+        create_multiple_keywords(db, ["exit", "good", "birddog"])
+
         mel_fest_keywords_ids = return_keywords_ids(db, mel_fest_keywords)
+
         yay_keywords_ids = return_keywords_ids(db, yay_keywords)
+        
         create_association_keywords_to_lab(db, labs[0].lab_id, mel_fest_keywords_ids)
+        
         create_association_keywords_to_lab(db, labs[1].lab_id, yay_keywords_ids)
 
 
-        keywords_ids = return_keywords_ids(db, ["outside", "goodness", "excite"])
+        keywords_ids = return_keywords_ids(db, ["outside", "exit", "good", "birddog", "goodness", "excite"])
+        print "\n\n\n line 227", keywords_ids[0], return_labs_by_keyword_id(db, keywords_ids[0])
 
 
         self.assertEqual("Yay",
             return_labs_by_keyword_id(db, keywords_ids[0])[0].title)
+
         self.assertEqual(["Balloonicorn Melon Festival", "Yay"],
             [lab.title for lab in return_labs_by_keyword_id(db, keywords_ids[1])])
+
         self.assertEqual("Balloonicorn Melon Festival",
             return_labs_by_keyword_id(db, keywords_ids[2])[0].title)
 

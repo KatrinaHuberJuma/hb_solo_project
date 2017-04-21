@@ -33,3 +33,12 @@
 
 <script type="text/javascript" src="../static/admin.js"></script>
 {% endblock %}
+
+
+{% if g.jasmine_tests %}
+    <link rel="stylesheet" href="/static/jasmine.min.css">
+    <script src="/static/jasmine.min.js"></script>
+    <script src="/static/jasmine-html.min.js"></script>
+    <script src="/static/boot.min.js"></script>
+    <script src="/static/admin-spec.js"></script>
+{% endif %} 

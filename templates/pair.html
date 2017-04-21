@@ -20,9 +20,9 @@
 <hr>
     <form id="update-pair-notes">
         <p>Edit your lab notes:</p>
-        <textarea form="update-pair-notes" id="update-notes" rows="4" cols="50" >{{ notes }}</textarea><br>
-        <input id="pair-id" type="hidden" value="{{ pair_id }}">
-        <input type="submit"><br>
+        <textarea required form="update-pair-notes" id="update-notes" rows="4" cols="50" >{{ notes }}</textarea><br>
+        <input required id="pair-id" type="hidden" value="{{ pair_id }}">
+        <input required type="submit"><br>
     </form>
 {% else %}
     <div>{{ notes }}</div>

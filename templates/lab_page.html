@@ -55,13 +55,13 @@
     <h3>Pair Students for this Lab</h3>
     <a href='#' id='deselect-all'>deselect all</a>
     <form id="new-pairs">
-        <select id='new-pair' multiple='multiple'>
+        <select required id='new-pair' multiple='multiple'>
           {% for student in students %}
           <option value='{{ student.student_id }}'>{{ student.name }}</option>
           {% endfor %}
         </select>
-        <input type="hidden" id="lab-id" name="lab_id" value="{{ lab.lab_id }}">
-        <input type="submit">
+        <input required type="hidden" id="lab-id" name="lab_id" value="{{ lab.lab_id }}">
+        <input required type="submit">
     </form>
 {% endif %}
 
@@ -75,6 +75,7 @@
 
 {% block scripts %}
 <script src="../static/jquery.multi-select.js"></script>
+<script type="text/javascript" src="../static/keyword.js"></script>
 
 <script type="text/javascript" src="../static/admin.js"></script>
 {% endblock %}

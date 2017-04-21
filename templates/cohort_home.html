@@ -36,13 +36,13 @@
         <h3>Join this Cohort!</h3>
 
         <form id="join-cohort">
-            <input id="enter-student-name" type="text" 
+            <input required id="enter-student-name" type="text" 
                 name="new_student_name" placeholder="Your Full Name">
-            <input id="enter-student-email" type="text" 
+            <input required id="enter-student-email" type="text" 
                 name="new_student_email" placeholder="Your email">
-            <input id="enter-student-password" type="password" 
+            <input required id="enter-student-password" type="password" 
                 name="new_student_password" placeholder="Your Personal Password">
-            <input id="enter-this-cohort-password" type="password" 
+            <input required id="enter-this-cohort-password" type="password" 
                 name="cohort_password" placeholder="Cohort Secret Password">
             <input type="submit">
         </form>
@@ -53,13 +53,13 @@
     <h3>Create new Lab</h3>
 
     <form id="create-lab">
-        <textarea required id="enter-lab-description" type="text" 
+        <textarea required required id="enter-lab-description" type="text" 
             name="new_lab_description" placeholder="Lab Description"></textarea><br>
-        <input required id="enter-lab-name" type="text" 
+        <input required required id="enter-lab-name" type="text" 
             name="new_lab_name" placeholder="Lab Name">
-        <input required id="enter-lab-instructions" type="text" 
+        <input required required id="enter-lab-instructions" type="text" 
             name="new_lab_instructions" placeholder="Lab Instructions Link">
-        <input required id="enter-lab-date" type="date" name="new_lab_date">     
+        <input required required id="enter-lab-date" type="date" name="new_lab_date">     
         <input type="submit">
     </form>
 

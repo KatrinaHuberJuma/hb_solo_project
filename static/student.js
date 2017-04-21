@@ -7,26 +7,26 @@ function showUpdates(results) {
     var githubLink = results.githubLink;
     var profilePic = results.profilePic;
 
-    if ($("#bio-content").html() !== bio) {
+    if ($("#bio-content").html() !== bio || $("#bio-content").html() !== "") {
         $("#bio-title").html("New Bio")
         $("#bio-content").html(bio)
         $("#update-bio").val("")
     }
 
-    if ($("#email-content").html() !== email) {
+    if ($("#email-content").html() !== email || $("#email-content").html() !== "") {
         $("#email-title").html("New Email")
         $("#email-content").html(email)
         $("#update-email").val("")
         $("#profile-pic").html("<img src=" + profilePic + "></div>") // TODO this doesn't work
     }
 
-    if ($("#github-link-content").html() !== githubLink) {
+    if ($("#github-link-content").html() !== githubLink || $("#github-link-content").html() !== "") {
         $("#github-link-title").html("<a  target='_blank' href='" + githubLink + "'>New Github Link</a>")
 
         $("#update-github-link").val("")
     }
 
-    if ($("#demo-link-content").html() !== demoVid) {
+    if ($("#demo-link-content").html() !== demoVid || $("#demo-link-content").html() !== "") {
         $("#demo-link-title").html("<a target='_blank' href='" + demoVid + "'>New Demo Video Link</a>")
         $("#update-demo-link").val("")
     }
