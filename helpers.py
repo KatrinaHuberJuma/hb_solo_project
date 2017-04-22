@@ -120,9 +120,9 @@ def return_keywords_ids(db, keywords):
     return kw_ids
 
 def return_labs_by_keyword_id(db, keyword_id):
-    print "\n\n\n in return labs by keyword", keyword_id
+
     labs = db.session.query(Lab).filter(Lab.labs_keywords.any(LabKeyword.keyword_id ==keyword_id)).all()
-    print labs
+    
     return labs
 
 def return_cohort_members(db, cohort_id):

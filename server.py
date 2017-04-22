@@ -491,6 +491,6 @@ if __name__ =="__main__":
 
     database_uri = "postgresql:///kattestdb" if app.config['TESTING'] else "postgresql:///katfuntest"
     connect_to_db(app, database_uri) # fixme before deployment
-    DebugToolbarExtension(app) # fixme before deployment
+    # DebugToolbarExtension(app) # fixme before deployment
 
     app.run(port=5000, host='0.0.0.0')

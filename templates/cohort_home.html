@@ -14,20 +14,42 @@
                 <li><a href="/{{ member.student_id }}-profile">{{ member.name }}</a></li>
             {% endfor %}
         </ul>
+        <h3>grad date is {{ cohort.grad_date.strftime('%m/%d/%Y') }}</h3>
+
     </div>
 
     <div class="col-md-6">
         <h2>{{ cohort.name}} Labs:</h2>
         <ul id="lab-list">
             {% for lab in cohort_labs %}
-                <li><a href="{{url_for('lab_details', lab_id = lab.lab_id)}}">{{ lab.title }}</a></li>
+                <li><a href="{{url_for('lab_details', lab_id = lab.lab_id)}}">{{ lab.title }}</a>
+                <ul>
+                    <li>{{ lab.description }}</li>
+                </ul>
+                </li>
             {% endfor %}
         </ul>
+        {% if "admin_id" in session %}
+
+            <h3>Create new Lab</h3>
+
+            <form id="create-lab">
+                
+                <input required required id="enter-lab-name" type="text" 
+                    name="new_lab_name" placeholder="Lab Name">
+                <input required required id="enter-lab-instructions" type="text" 
+                    name="new_lab_instructions" placeholder="Lab Instructions Link"><br>
+                <textarea required required id="enter-lab-description" type="text" 
+                    name="new_lab_description" placeholder="Lab Description"></textarea><br>
+                <input required required id="enter-lab-date" type="date" name="new_lab_date">     
+                <input type="submit">
+            </form>
+
+        {% endif %}
     </div>
 
 </div>
 
-<h6>grad date is {{ cohort.grad_date.strftime('%m/%d/%Y') }}</h6>
 
 
 {% if "admin_id" not in session %}
@@ -48,22 +70,8 @@
         </form>
     </div>
     {% endif %}
-{% else %}
-
-    <h3>Create new Lab</h3>
-
-    <form id="create-lab">
-        <textarea required required id="enter-lab-description" type="text" 
-            name="new_lab_description" placeholder="Lab Description"></textarea><br>
-        <input required required id="enter-lab-name" type="text" 
-            name="new_lab_name" placeholder="Lab Name">
-        <input required required id="enter-lab-instructions" type="text" 
-            name="new_lab_instructions" placeholder="Lab Instructions Link">
-        <input required required id="enter-lab-date" type="date" name="new_lab_date">     
-        <input type="submit">
-    </form>
-
 {% endif %}
+
 
 
 
