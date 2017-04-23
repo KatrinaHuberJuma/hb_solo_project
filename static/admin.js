@@ -37,11 +37,13 @@ $('#create-cohort').on('submit', submitNewCohortInfo)
 
 function showNewLab(results) {
     // display 
+    console.log(results)
 
-    var resultString = results.string
+    var resultTitle = results.title
+    var resultDescription = results.description
     var resultId = results.createdId
 
-    $("#lab-list").append("<li id='new-lab'><a href='/lab/" + resultId + "'>" + resultString + "</a></li>")
+    $("#lab-list").append("<li id='new-lab'><a href='/lab/" + resultId + "'>" + resultTitle + "</a><ul><li>" + resultDescription+ "</li></ul></li>")
 
     $("#enter-lab-name").val("")
     $("#enter-lab-description").val("")

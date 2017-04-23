@@ -384,7 +384,8 @@ def add_lab():
 
 
     response = {
-                "string": new_lab.title,
+                "title": new_lab.title,
+                "description": new_lab.description,
                 "createdId": new_lab.lab_id
                 }
 
