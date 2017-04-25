@@ -81,7 +81,7 @@ $("#update-student-details").on("submit", submitUpdates);
 function showUpdatedNotes(results) {
 
     $("#submitted-notes").html(results.newNotes)
-    console.log(results.newNotes)
+    
 }
 
 

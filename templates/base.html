@@ -2,11 +2,16 @@
 <head>
     <title>{% block title %}TITLE HERE{% endblock %}</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
+    <!-- <link href="https://fonts.googleapis.com/css?family=Marck+Script|Play" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Cutive+Mono|Dosis" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Coming+Soon|Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Arima+Madurai|Raleway" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../static/css/multi-select.css">
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 </head>
 <body>
+    <div id="above-all"><div id="logo"><object href="/" type="image/svg+xml" data="../static/img/pear23.svg">Pair Necessities logo</a></object></div></div>
     <nav>
         <a href="/"><button>Home</button></a>
         {% if "student_id" in session %}
@@ -33,14 +38,20 @@
   {% endfor %}
 
 <div class="container-fluid">
+
+
     {% block content %}CONTENT HERE{% endblock %}
 </div>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../static/jquery.multi-select.js"></script>
+<script type="text/javascript" src="../static/keyword.js"></script>
+<script type="text/javascript" src="../static/student.js"></script>
+<script type="text/javascript" src="../static/admin.js"></script>
 
 
-{% block scripts %}Scripts here{% endblock %}
+<!-- {% block scripts %}Scripts here{% endblock %} -->
 
 
 </body>

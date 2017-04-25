@@ -2,3 +2,119 @@
     color: #d6d6d6;
     background-color: red;
 }
+
+#above-all {
+    background-color: #33050A;
+}
+
+body {
+    /*font-family: 'Play', sans-serif;*/
+    /*font-family: 'Dosis', sans-serif;*/
+    font-family: 'Raleway', sans-serif;
+    /*background-color: rgb(244, 245, 204);*/
+    font-size: 13pt;
+    
+}
+
+
+h1, h2, h3 {
+    /*font-family: 'Cutive Mono', monospace;*/
+    /*font-family: 'Coming Soon', cursive;*/
+    font-family: 'Arima Madurai', cursive;
+    color: #33050A;
+}
+
+
+h1 {
+    font-size: 50pt;
+}
+
+
+h2 {
+    font-size: 36pt;
+}
+
+
+h3 {
+    font-size: 25pt;
+}
+
+
+h4, h5, h6 {
+    font-family: 'Play', sans-serif;
+    color: rgb(139, 94, 60);
+}
+
+
+h4 {
+    font-size: 25;
+}
+
+h5 {
+    font-size: 12pt;
+}
+a {
+    color: #a7cd04;
+}
+a:hover {
+    color: #33050A;
+}
+
+nav {
+    background-color: rgb(203, 222, 118);
+    width: 100%;
+    height: 50px;
+}
+
+nav button {
+    background-color: rgb(203, 222, 118);
+    border-style: none;
+    margin: 0 auto;
+    float: right;
+    padding: 10px 20px;
+    color: rgb(139, 94, 60);
+    font-size: 20;
+}
+.signed-in {
+    font-style: italic;
+}
+.keyword-button {
+    background-color: rgb(203, 222, 118);
+    border-style: none;
+    margin: 10;
+    padding: 10px 20px;
+    color: rgb(139, 94, 60);
+    width: 90%;
+    float: center;
+}
+
+#keyword-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    column-count: 3;
+}
+textarea {
+    width: auto;
+    margin: 5px;
+}
+input {
+    width: auto;
+    padding:3px 3%;
+    margin: 5px;
+}
+.container-fluid {
+    padding: 2% 5%;
+}
+input[type=submit] {
+    padding:5px 15px; 
+    background: rgb(139, 94, 60); 
+    border:0 none;
+    color: rgb(244, 245, 204);
+}
+input[type=radio] {
+    width: 20px;
+}
+#add-keyword input {
+    width: 100%;
+}

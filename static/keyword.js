@@ -6,7 +6,7 @@
 function showNewKeyword(results) {
 
     for (var i = 0; i < results.length; i++) {
-        $("#related-keywords").append("<li>" + results[i] + "</li>")
+        $("#related-keywords").append("<li><h5>" + results[i] + "</h5></li>")
     }
 
     $("#enter-new-keywords").val("")

@@ -235,6 +235,7 @@ def pair_page(pairing_id):
 
 @app.route("/update-pair-notes", methods=["POST"])
 def update_pair_lab_notes():
+    print "in update_lab_notes"
 
     notes = request.form.get("pair_notes")
     pair_id = request.form.get("pair_id")

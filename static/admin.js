@@ -43,7 +43,7 @@ function showNewLab(results) {
     var resultDescription = results.description
     var resultId = results.createdId
 
-    $("#lab-list").append("<li id='new-lab'><a href='/lab/" + resultId + "'>" + resultTitle + "</a><ul><li>" + resultDescription+ "</li></ul></li>")
+    $("#lab-list").append("<li id='new-lab'><a href='/lab/" + resultId + "'>" + resultTitle + "</a></li>")
 
     $("#enter-lab-name").val("")
     $("#enter-lab-description").val("")
@@ -116,8 +116,8 @@ function showPairedStudents(results) {
     var unpaireds = results.unpaireds;
 
     for (var pair of pairs){
-        $("#established-pairs").append("<li><h3>" + pair.student_1_name + 
-            " paired with " + pair.student_2_name + "</h3>notes: " + pair.notes + "</li>")
+        $("#established-pairs").append("<li><h3><a href+'" + pair.pairing_id + "'>" + pair.student_1_name + 
+            " paired with " + pair.student_2_name + "</a></h3>notes: " + pair.notes + "</li>")
     }
 
     $("#new-pair").html(" ");
@@ -139,6 +139,9 @@ function submitPairGroup(evt){
     }
     evt.preventDefault();
     $.post("/pair_students", formInput, showPairedStudents)
+    if ($("#pair-students").length === 0) {
+        $("#pair-students").slideUp()
+    }
 }
 
 

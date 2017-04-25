@@ -2,55 +2,18 @@
 
 {% block title %} Kat Project Lab {% endblock %}
 
-{% block styles %}
-
-<link rel="stylesheet" type="text/css" href="../static/css/multi-select.css">
-
-{% endblock %}
 
 {% block content %}
+<div class="row">
+<div class="col-md-8">
 
 <h1>{{ lab.title }}</h1>
+<h5>{{ lab.date.strftime('%m/%d/%Y') }}</h5>
 
-<h2>{{ lab.description }}</h2>
+<h4>{{ lab.description }}</h4>
 
-
-
-<!-- {{ lab.date }} -->
-<ul id="established-pairs">
-    {% for pair in pairs %}
-        {% if pair.student1.student_id == session["student_id"] %}
-            <li><h2><a href="/pair/{{ pair.pairing_id }}">{{ pair.student1.name }} paired with {{ pair.student2.name }}</a></h2>
-                notes: {{ pair.notes }}</li>
-        {% else %}
-            <li><h3><a href="/pair/{{ pair.pairing_id }}">{{ pair.student1.name }} paired with {{ pair.student2.name }}</a></h3>
-                notes: {{ pair.notes }}</li>
-        {% endif %}
-    {% endfor %}
-</ul>
-
-
-<h4>Keywords:</h4>
-<ul id="related-keywords">
-    {% for keyword in keywords %}
-    <li><h5>{{ keyword.keyword }} </h5></li>
-    {% endfor %}
-</ul>
-
-{% if "student_id" in session or "admin_id" in session %}
-
-    <h3>Add Keyword to this Lab</h3>
-
-    <form id="add-keyword">
-        <input id="enter-new-keywords" type="text" 
-                name="new_keywords" placeholder="comma separated keywords">
-        <input id="enter-lab-id" type="hidden" name="lab_id_for_keyword" value="{{ lab.lab_id }}" >
-        <input type="submit">
-    </form>
-
-{% endif %}
-
-{% if "admin_id" in session %}
+{% if "admin_id" in session and students|length > 1 %}
+<div id="pair-students">
 <hr>
     <h3>Pair Students for this Lab</h3>
     <a href='#' id='deselect-all'>deselect all</a>
@@ -63,9 +26,51 @@
         <input required type="hidden" id="lab-id" name="lab_id" value="{{ lab.lab_id }}">
         <input required type="submit">
     </form>
+</div>
 {% endif %}
 
+<ul id="established-pairs">
+    {% for pair in pairs %}
+        {% if pair.student1.student_id == session["student_id"] %}
+            <li><h3 class="signed-in"><a href="/pair/{{ pair.pairing_id }}">{{ pair.student1.name }} paired with {{ pair.student2.name }}</a></h3>
+                notes: {{ pair.notes }}</li>
+        {% else %}
+            <li><h3><a href="/pair/{{ pair.pairing_id }}">{{ pair.student1.name }} paired with {{ pair.student2.name }}</a></h3>
+                notes: {{ pair.notes }}</li>
+        {% endif %}
+    {% endfor %}
+</ul>
 
+
+
+</div>
+
+
+<div class="col-md-4">
+
+
+{% if "student_id" in session or "admin_id" in session %}
+
+    <h3>Add Keyword to this Lab</h3>
+
+    <form id="add-keyword">
+        <input id="enter-new-keywords" type="text" 
+                name="new_keywords" placeholder="comma separated keywords"><br>
+        <input id="enter-lab-id" type="hidden" name="lab_id_for_keyword" value="{{ lab.lab_id }}" >
+        <input type="submit">
+    </form>
+
+{% endif %}
+
+<h4>Keywords:</h4>
+<ul id="related-keywords">
+    {% for keyword in keywords %}
+    <li><h5>{{ keyword.keyword }} </h5></li>
+    {% endfor %}
+</ul>
+
+</div>
+</div>
 
 {% endblock %}
 
