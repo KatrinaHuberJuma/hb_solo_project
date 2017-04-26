@@ -4,13 +4,16 @@
 
 
 {% block content %}
+<div class="row top-row">
+<h1 class="page-title">{{ lab.title }}</h1>
+<h4>{{ lab.description }}</h4>
+<h4><a href="{{ lab.instructions }}">Instructions</a></h4>
+<h5>{{ lab.date.strftime('%m/%d/%Y') }}</h5>
+</div>
+
+
 <div class="row">
 <div class="col-md-8">
-
-<h1>{{ lab.title }}</h1>
-<h5>{{ lab.date.strftime('%m/%d/%Y') }}</h5>
-
-<h4>{{ lab.description }}</h4>
 
 {% if "admin_id" in session and students|length > 1 %}
 <div id="pair-students">
@@ -33,10 +36,10 @@
     {% for pair in pairs %}
         {% if pair.student1.student_id == session["student_id"] %}
             <li><h3 class="signed-in"><a href="/pair/{{ pair.pairing_id }}">{{ pair.student1.name }} paired with {{ pair.student2.name }}</a></h3>
-                notes: {{ pair.notes }}</li>
+                <p class="overflow-notes">notes: {{ pair.notes }}</p></li>
         {% else %}
             <li><h3><a href="/pair/{{ pair.pairing_id }}">{{ pair.student1.name }} paired with {{ pair.student2.name }}</a></h3>
-                notes: {{ pair.notes }}</li>
+                <p class="overflow-notes">notes: {{ pair.notes }}</p></li>
         {% endif %}
     {% endfor %}
 </ul>
@@ -50,7 +53,7 @@
 
 
 {% if "student_id" in session or "admin_id" in session %}
-
+    
     <h3>Add Keyword to this Lab</h3>
 
     <form id="add-keyword">

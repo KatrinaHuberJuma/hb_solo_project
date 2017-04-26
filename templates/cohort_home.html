@@ -4,6 +4,25 @@
 
 {% block content %}
 
+{% if "admin_id" not in session %}
+    {% if "student_id" not in session %}
+    <div id="join-cohort-form">
+        <h3>Join this Cohort!</h3>
+
+        <form id="join-cohort">
+            <input required id="enter-student-name" type="text" 
+                name="new_student_name" placeholder="Your Full Name">
+            <input required id="enter-student-email" type="text" 
+                name="new_student_email" placeholder="Your email">
+            <input required id="enter-student-password" type="password" 
+                name="new_student_password" placeholder="Your Personal Password">
+            <input required id="enter-this-cohort-password" type="password" 
+                name="cohort_password" placeholder="Cohort Secret Password">
+            <input type="submit">
+        </form>
+    </div>
+    {% endif %}
+{% endif %}
 
 
 <div class="row">
@@ -49,25 +68,6 @@
 
 
 
-{% if "admin_id" not in session %}
-    {% if "student_id" not in session %}
-    <div id="join-cohort-form">
-        <h3>Join this Cohort!</h3>
-
-        <form id="join-cohort">
-            <input required id="enter-student-name" type="text" 
-                name="new_student_name" placeholder="Your Full Name">
-            <input required id="enter-student-email" type="text" 
-                name="new_student_email" placeholder="Your email">
-            <input required id="enter-student-password" type="password" 
-                name="new_student_password" placeholder="Your Personal Password">
-            <input required id="enter-this-cohort-password" type="password" 
-                name="cohort_password" placeholder="Cohort Secret Password">
-            <input type="submit">
-        </form>
-    </div>
-    {% endif %}
-{% endif %}
 
 
 

@@ -13,9 +13,13 @@ body {
     font-family: 'Raleway', sans-serif;
     /*background-color: rgb(244, 245, 204);*/
     font-size: 13pt;
+    background-color: #33050A;
     
 }
-
+#logo {
+    width: 300px;
+    padding: 5px;
+}
 
 h1, h2, h3 {
     /*font-family: 'Cutive Mono', monospace;*/
@@ -75,6 +79,7 @@ nav button {
     color: rgb(139, 94, 60);
     font-size: 20;
 }
+
 .signed-in {
     font-style: italic;
 }
@@ -104,7 +109,12 @@ input {
     margin: 5px;
 }
 .container-fluid {
-    padding: 2% 5%;
+    background-color: #fff;
+    padding-left: 6%;
+    padding-top: 200px;
+    padding-right: 6%;
+    padding-bottom: 100px;
+
 }
 input[type=submit] {
     padding:5px 15px; 
@@ -117,4 +127,19 @@ input[type=radio] {
 }
 #add-keyword input {
     width: 100%;
+}
+#update-notes {
+    width: 100%;
+    height: 50%;
+}
+.top-row {
+    width: 100%;
+    text-align: center;
+    float: center;
+}
+.overflow-notes {
+    white-space: nowrap; 
+    width: 50%; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
 }

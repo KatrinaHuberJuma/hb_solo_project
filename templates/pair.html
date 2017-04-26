@@ -10,22 +10,22 @@
 
 {% block content %}
 
-<h1><a href="/{{ student1.student_id }}-profile">{{ student1.name }}&#39;s</a> and <a href="/{{ student2.student_id }}-profile">{{ student2.name }}&#39;s</a> &ldquo;{{ lab.title }}&rdquo; notes</h1>
+<h2><a href="/{{ student1.student_id }}-profile">{{ student1.name }}&#39;s</a> and <a href="/{{ student2.student_id }}-profile">{{ student2.name }}&#39;s</a> <a href="{{url_for('lab_details', lab_id = lab.lab_id)}}">&ldquo;{{ lab.title }}&rdquo; </a>notes</h2>
 
 
 {% if session["student_id"] in [student1.student_id, student2.student_id] %}
 <div id="submitted-notes">
+<p>{{ notes }}</p>
 
 </div>
 <hr>
     <form id="update-pair-notes">
         <p>Edit your lab notes:</p>
-        <textarea required form="update-pair-notes" id="update-notes" rows="4" cols="50" >{{ notes }}</textarea><br>
+        <textarea required form="update-pair-notes" id="update-notes">{{ notes }}</textarea><br>
         <input required id="pair-id" type="hidden" value="{{ pair_id }}">
         <input required type="submit"><br>
     </form>
-{% else %}
-    <div>{{ notes }}</div>
+
 {% endif %}
 
 

@@ -11,7 +11,8 @@
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 </head>
 <body>
-    <div id="above-all"><div id="logo"><object href="/" type="image/svg+xml" data="../static/img/pear23.svg">Pair Necessities logo</a></object></div></div>
+    <div class="navbar-fixed-top">
+    <div id="above-all"><div id="logo"><img id="logo" src="../static/img/pear23.png"></div></div>
     <nav>
         <a href="/"><button>Home</button></a>
         {% if "student_id" in session %}
@@ -33,6 +34,7 @@
 
         
     </nav>
+    </div>
   {% for msg in get_flashed_messages() %}
     <div class="alert alert-info">{{ msg }}</div>
   {% endfor %}

@@ -18,11 +18,13 @@ class RelationshipTests(unittest.TestCase):
         connect_to_db(app, "postgresql:///kattestdb")
         db.create_all()
 
+
     def tearDown(self):
         """Should close the session and drop all tables"""
 
         db.session.close()
         db.drop_all()
+
 
     def test_admin_row(self):
         """checks that 'Addy Gladdy' was correctly added to the database"""
@@ -34,6 +36,7 @@ class RelationshipTests(unittest.TestCase):
             .first()
             .github_link
             )
+
 
     def test_cohort_row(self):
         """checks that the test cohort is in the cohorts table"""
@@ -136,7 +139,6 @@ class RelationshipTests(unittest.TestCase):
         self.assertEqual("puppy", existing_keywords[1].keyword)
 
 
-
     def test_return_certain_keywords_ids(self):
 
         create_multiple_keywords(db=db, keywords=["Elephant", "puppy", "skipme", "cool"])
@@ -144,7 +146,6 @@ class RelationshipTests(unittest.TestCase):
         certain_ids = return_certain_keywords_ids(db=db, keywords=["Elephant", "cool", "puppy"])
 
         self.assertEqual([1, 2, 4], certain_ids)        
-
 
 
     def test_return_keywords_ids(self):
@@ -155,7 +156,6 @@ class RelationshipTests(unittest.TestCase):
         these_kw_ids = return_keywords_ids(db=db, keywords=["Elephant", "cool", "puppy", "bestie"])
 
         self.assertEqual(set([1, 2, 4, 5]), set(these_kw_ids)) 
-
 
 
     def test_lab_keywords_association(self):
@@ -229,7 +229,6 @@ class RelationshipTests(unittest.TestCase):
             return_labs_by_keyword_id(db, 3)[0].title)
 
 
-
     def test_create_lab_pair(self):
 
         create_addy_admin()
@@ -264,7 +263,8 @@ class RelationshipTests(unittest.TestCase):
             .first()
             .notes
             )
-            
+ 
+
     def test_return_other_students(self):
 
         create_addy_admin()
@@ -276,6 +276,7 @@ class RelationshipTests(unittest.TestCase):
         self.assertNotIn("Beth Happy", [student.name for student in other_students])
         self.assertIn("Ellen Bellen", [student.name for student in other_students])
 
+  
     def test_student_update(self):
 
         create_addy_admin()
@@ -303,6 +304,7 @@ class RelationshipTests(unittest.TestCase):
         self.assertEqual("yo.hub", 
             Student.query.filter(Student.student_id ==
             1).first().github_link)
+
 
     def test_return_pair_details(self):
 
