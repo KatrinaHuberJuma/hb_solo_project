@@ -6,7 +6,7 @@
 
 Pair Necessities is a reference tool for bootcamp students to keep track of lab content and pair programming history. Admin can login, create cohorts, create labs and pair students for labs. 
 
-![Admin view of lab page](/static/img/pairStudentsForLab.png)
+![Admin view of lab page](/static/img/pairStudentsforLab.png)
 
 A student can login to a cohort she has already joined, or, if she enters the correct cohort password, join a cohort. She can find labs by keyword, add keywords to a lab, find the instructions and see who she paired with, edit the notes she shares with her lab pair, so that she can keep track of learnings. She can also edit her profile or change her personal password.
 
