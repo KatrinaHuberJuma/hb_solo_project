@@ -1,7 +1,7 @@
 ![Pair of pears logo](/static/img/pear23.png)
 
 # Pair Necessities
-
+a hackbright project
 ![lab page](/static/img/labDetailsPage.png)
 
 Pair Necessities is a reference tool for bootcamp students to keep track of lab content and pair programming history. Admin can login, create cohorts, create labs and pair students for labs. 
