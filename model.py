@@ -1,5 +1,5 @@
 # from server import app
-
+# Hello everyone in lecture! this is great
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
